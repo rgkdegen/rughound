@@ -1,0 +1,13 @@
+{
+  "name": "rughound",
+  "version": "1.0.0",
+  "description": "RUGHOUND · $SNIFF — one dog runs your pump.fun rug filter. SNIFF → DIG → BARK → BURY / FETCH. 11 hard red flags, one 0.85 gate.",
+  "license": "MIT",
+  "scripts": {
+    "demo": "node src/sniff.js",
+    "test": "node --test test/sniff.test.js",
+    "render": "node scripts/render.js rughound.mp4",
+    "banner": "node scripts/banner.js"
+  },
+  "devDependencies": { "playwright": "^1.47.0" }
+}

@@ -1,0 +1,318 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>RUGHOUND · $SNIFF</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+:root{--bg:#0a0907;--pan:rgba(20,16,11,.92);--bd:#3a2d1c;--bd2:#5a4426;--tx:#f5ecdf;--dim:#9a8a72;--dim2:#5e5240;
+ --am:#ffb340;--am2:#ff8a1f;--mt:#3fffc8;--rd:#ff4d5e;--cr:#f2dcb6;--gd:#ffd84a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:JB,monospace;color:var(--tx);font-size:12px}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(420px 520px at 540px 520px,rgba(255,179,64,.16),transparent 70%),
+ radial-gradient(700px 500px at 100% 0%,rgba(63,255,200,.07),transparent 70%),
+ radial-gradient(600px 500px at 0% 100%,rgba(255,77,94,.06),transparent 70%),var(--bg)}
+#app::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,179,64,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,179,64,.03) 1px,transparent 1px);background-size:22px 22px}
+.abs{position:absolute}
+.panel{position:absolute;background:var(--pan);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.panel.on{border-color:var(--am);box-shadow:0 0 0 1px rgba(255,179,64,.5),0 0 26px rgba(255,179,64,.35)}
+.panel.onr{border-color:var(--rd);box-shadow:0 0 0 1px rgba(255,77,94,.5),0 0 26px rgba(255,77,94,.4)}
+.panel.ong{border-color:var(--mt);box-shadow:0 0 0 1px rgba(63,255,200,.45),0 0 26px rgba(63,255,200,.35)}
+.ph{position:absolute;left:12px;top:9px;font-size:11.5px;font-weight:800;letter-spacing:.7px}
+.ph b{display:inline-block;min-width:20px;padding:1px 5px;margin-right:6px;border-radius:4px;background:rgba(255,179,64,.15);color:var(--am)}
+.pt{position:absolute;right:12px;top:10px;font-size:10px}
+.a{color:var(--am)}.m{color:var(--mt)}.r{color:#ff6b78}.d{color:var(--dim)}.c{color:var(--cr)}
+.kpi .h{position:absolute;left:12px;top:9px;font-size:10.5px;font-weight:700;letter-spacing:.4px}
+.kpi .big{position:absolute;left:11px;top:25px;font-size:34px;font-weight:800;letter-spacing:-1px}
+.kpi .s{position:absolute;left:12px;bottom:7px;font-size:9.5px;color:var(--dim)}
+.row{display:flex;justify-content:space-between;height:23px;align-items:center;font-size:11px;border-bottom:1px solid #2a2116;padding:0 4px}
+.fl{position:absolute;width:152px;height:28px;border:1px solid var(--bd2);border-radius:6px;font-size:10.5px;display:flex;align-items:center;padding-left:8px;color:var(--dim)}
+.fl.hit{border-color:var(--rd);background:rgba(255,77,94,.2);color:#fff;box-shadow:0 0 14px rgba(255,77,94,.45)}
+.fl.ok{border-color:rgba(63,255,200,.5);color:var(--mt)}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.3px;white-space:pre}
+.chip{position:absolute;padding:4px 9px;border-radius:6px;border:2px solid var(--am);background:rgba(30,20,8,.95);font-size:13px;font-weight:800;white-space:nowrap;box-shadow:0 0 14px rgba(255,179,64,.6);z-index:22}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#outro{position:absolute;inset:0;z-index:70;opacity:0}
+#outro .cc{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div id="streams"></div>
+ <div class="abs" style="left:18px;top:12px;font-family:RB;font-weight:900;font-size:38px;color:var(--am);letter-spacing:1px;text-shadow:0 0 16px rgba(255,179,64,.6)">RUG<span style="color:var(--mt);text-shadow:0 0 16px rgba(63,255,200,.6)">HOUND</span></div>
+ <div class="abs" style="left:262px;top:20px;padding:3px 12px;border:1.5px solid var(--gd);border-radius:7px;font-size:16px;font-weight:800;color:var(--gd);background:rgba(255,216,74,.1);box-shadow:0 0 12px rgba(255,216,74,.35)">$SNIFF</div>
+ <div class="abs d" style="left:372px;top:26px;font-size:11px">one dog · every task · SNIFF → DIG → BARK → BURY / FETCH</div>
+ <div class="abs" style="right:18px;top:24px;font-size:13px;font-weight:800;color:var(--am2)">built by RUGIKK</div>
+ <div class="panel kpi" style="left:16px;top:66px;width:254px;height:96px"><div class="h">PAIRS SNIFFED</div><div class="big c" id="k1">0</div><div class="s">pump.fun · new pairs · live</div></div>
+ <div class="panel kpi" style="left:282px;top:66px;width:254px;height:96px"><div class="h">RUGS BURIED</div><div class="big r" id="k2" style="text-shadow:0 0 12px rgba(255,77,94,.5)">0</div><div class="s">in the backyard</div></div>
+ <div class="panel kpi" style="left:548px;top:66px;width:254px;height:96px"><div class="h">BONES FETCHED</div><div class="big m" id="k3" style="text-shadow:0 0 12px rgba(63,255,200,.5)">0</div><div class="s">clean coins · tp ladder</div></div>
+ <div class="panel kpi" style="left:814px;top:66px;width:250px;height:96px" id="pnlCard"><div class="h">KIBBLE · PNL</div><div class="pt a">SOL</div><div class="big a" id="k4" style="text-shadow:0 0 14px rgba(255,179,64,.55)">+0.00</div><div class="s">0 rugs held · good boy</div></div>
+
+ <!-- left column -->
+ <div class="panel" id="sSNIFF" style="left:16px;top:176px;width:340px;height:256px">
+  <div class="ph"><b>01</b>SNIFF <span class="d" style="font-weight:400">· new pairs</span></div><div class="pt d" id="sniffTag">nose on</div>
+  <svg id="scent" class="abs" style="left:10px;top:32px" width="320" height="62"></svg>
+  <div id="pairs" class="abs" style="left:12px;right:12px;top:98px"></div>
+ </div>
+ <div class="panel" id="sDIG" style="left:16px;top:444px;width:340px;height:256px">
+  <div class="ph"><b>02</b>DIG <span class="d" style="font-weight:400">· dev wallet</span></div><div class="pt d" id="digTag">idle</div>
+  <svg id="dig" class="abs" style="left:0;top:28px" width="340" height="228"></svg>
+ </div>
+ <div class="panel" id="sBURY" style="left:16px;top:712px;width:340px;height:252px">
+  <div class="ph"><b>04</b>BURY <span class="d" style="font-weight:400">· the backyard</span></div><div class="pt r" id="buryTag">0 buried</div>
+  <svg id="yard" class="abs" style="left:0;top:26px" width="340" height="226"></svg>
+ </div>
+ <!-- right column -->
+ <div class="panel" id="sBARK" style="left:724px;top:176px;width:340px;height:256px">
+  <div class="ph"><b>03</b>BARK <span class="d" style="font-weight:400">· 8 red flags</span></div><div class="pt d" id="barkTag">quiet</div>
+  <div id="flags" class="abs" style="left:12px;top:36px;width:320px;height:150px"></div>
+  <div id="barkBig" class="abs" style="left:0;right:0;top:186px;text-align:center;font-family:RB;font-weight:900;font-size:40px"></div>
+  <div id="barkSub" class="abs" style="left:0;right:0;top:232px;text-align:center;font-size:11px"></div>
+ </div>
+ <div class="panel" id="sFETCH" style="left:724px;top:444px;width:340px;height:256px">
+  <div class="ph"><b>05</b>FETCH <span class="d" style="font-weight:400">· bones = bags</span></div><div class="pt m" id="fetchTag">0 fetched</div>
+  <div id="ladder" class="abs" style="left:12px;right:12px;top:36px"></div>
+  <div id="fetched" class="abs" style="left:12px;right:12px;top:140px"></div>
+ </div>
+ <div class="panel" style="left:724px;top:712px;width:340px;height:252px">
+  <div class="ph a">KIBBLE BOWL</div><div class="pt a" id="bowlTag">0%</div>
+  <svg id="bowl" class="abs" style="left:20px;top:34px" width="300" height="210"></svg>
+ </div>
+ <!-- center stage -->
+ <div class="abs" style="left:370px;top:176px;width:340px;height:788px;border:1px solid #3a2d1c;border-radius:14px;background:radial-gradient(ellipse at 50% 55%,rgba(255,179,64,.12),rgba(10,9,7,0) 70%)"></div>
+ <div class="abs a" style="left:370px;top:186px;width:340px;text-align:center;font-size:10.5px;font-weight:800;letter-spacing:2px">NOW SNIFFING <span class="d" id="caseTag" style="letter-spacing:0">—</span></div>
+ <div id="tk" class="abs" style="left:370px;top:204px;width:340px;text-align:center;font-size:44px;font-weight:800;letter-spacing:-1px">$????</div>
+ <div id="tm" class="abs d" style="left:370px;top:258px;width:340px;text-align:center;font-size:11px">waiting for a scent</div>
+ <div id="spot" class="abs" style="left:400px;top:300px;width:280px;height:520px;background:radial-gradient(ellipse at 50% 30%,rgba(255,220,150,.16),transparent 65%);clip-path:polygon(35% 0,65% 0,100% 100%,0 100%)"></div>
+ <div id="dogW" class="abs" style="left:395px;top:300px;width:290px;height:362px;z-index:10;transform-origin:145px 330px"></div>
+ <svg id="dfx" class="abs" width="1080" height="1350" style="left:0;top:0;z-index:12;pointer-events:none"></svg>
+ <div id="bub" class="abs" style="z-index:25;padding:4px 10px;border:1.5px solid var(--am);border-radius:8px;font-size:14px;font-weight:800;background:rgba(14,10,6,.92);white-space:nowrap"></div>
+ <div id="verdict" class="abs" style="left:392px;top:690px;width:296px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;letter-spacing:1.5px;z-index:14"></div>
+ <div id="steps" class="abs" style="left:392px;top:756px;width:296px;font-size:11px;line-height:24px;z-index:14"></div>
+ <div id="tasks" class="abs" style="left:392px;top:796px;width:296px;font-size:11px;z-index:14"></div><div class="abs" style="left:392px;top:924px;width:296px;text-align:center;font-family:RB;font-weight:900;font-size:20px;color:var(--gd);text-shadow:0 0 12px rgba(255,216,74,.5)">🐾 $SNIFF HQ</div>
+
+ <div class="panel" style="left:16px;top:976px;width:520px;height:310px">
+  <div class="ph a">KIBBLE CHART</div><div class="pt a" id="pnlTag">+0.00 SOL</div>
+  <svg id="chart" class="abs" style="left:10px;top:34px" width="500" height="266"></svg>
+ </div>
+ <div class="panel" style="left:548px;top:976px;width:516px;height:310px">
+  <div class="ph m">sniff.log</div><div class="pt d" id="lps"></div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--am),var(--mt));box-shadow:0 0 8px var(--am)"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">SNIFF · DIG · BARK · BURY THE RUGS · FETCH THE BONES</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">$SNIFF · simulated run · metrics illustrative · @rgk_degen</div>
+ <div id="chips"></div>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oBg" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div class="cc" id="o1" style="top:96px;font-family:RB;font-weight:900;font-size:128px;color:var(--am);text-shadow:0 0 30px rgba(255,179,64,.8)">RUG<span style="color:var(--mt);text-shadow:0 0 30px rgba(63,255,200,.8)">HOUND</span></div>
+ <div class="cc" id="o2" style="top:252px"><span style="display:inline-block;padding:6px 22px;border:3px solid var(--gd);border-radius:12px;font-size:40px;font-weight:800;color:var(--gd);box-shadow:0 0 22px rgba(255,216,74,.5)">$SNIFF</span></div>
+ <div class="cc" id="o3" style="top:340px;font-size:20px;font-weight:700">one dog. every task. no rugs in the bag.</div>
+ <div id="oDog" class="abs" style="left:395px;top:390px;width:290px;height:362px"></div>
+ <div class="cc" id="o4" style="top:772px;font-size:92px;font-weight:800;color:var(--am);text-shadow:0 0 26px rgba(255,179,64,.7)">+16.24 SOL</div>
+ <div class="cc" id="o5" style="top:888px;font-size:20px;font-weight:800"><span class="r">6 rugs buried</span> &nbsp;·&nbsp; <span class="m">4 bones fetched</span> &nbsp;·&nbsp; 0 rugs held</div>
+ <div class="cc d" id="o6" style="top:930px;font-size:13px">SNIFF → DIG → BARK → BURY / FETCH · 41,206 pairs sniffed</div>
+ <div class="cc" id="o7" style="top:986px;font-family:RB;font-weight:900;font-size:58px;color:var(--mt);text-shadow:0 0 20px rgba(63,255,200,.7)">good boy.</div>
+ <div class="cc" id="o8" style="top:1100px;font-family:RB;font-weight:700;font-size:30px;color:var(--am2);text-shadow:0 0 14px rgba(255,138,31,.6)">built by RUGIKK</div>
+ <div class="cc d" id="o9" style="top:1146px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+function bez(p0,p1,p2,u){const a=1-u;return [a*a*p0[0]+2*a*u*p1[0]+u*u*p2[0],a*a*p0[1]+2*a*u*p1[1]+u*u*p2[1]]}
+const FL=['dev bag','LP unlocked','honeypot','bundled','copycat','mint live','bot hype','fresh socials'];
+const R='rug',W='win';
+const C=[
+ {t:'FLEA',v:R,mc:'41K',age:'2m',f:0,why:'dev holds 41%',dig:['dev 7xF…a2','funded by 3 fresh wallets','holds 41% of supply']},
+ {t:'BONE',v:W,mc:'188K',age:'12m',pnl:3.20,dig:['dev Bn4…9q','funded from CEX 6 mo ago','holds 1.8% · sold 0']},
+ {t:'LEASH',v:R,mc:'63K',age:'4m',f:1,why:'LP unlocked',dig:['dev Ls2…kk','LP tokens still in dev wallet','can pull liquidity anytime']},
+ {t:'MUZZLE',v:R,mc:'97K',age:'6m',f:2,why:'99% sell tax',dig:['dev Mz8…01','transfer hook on sells','sell tax 99% · honeypot']},
+ {t:'ZOOMIES',v:W,mc:'262K',age:'15m',pnl:4.75,dig:['dev Zm1…pp','old wallet · 3 clean launches','LP burned · 1,240 holders']},
+ {t:'STRAY',v:R,mc:'74K',age:'3m',f:3,why:'68% bundled',dig:['dev St6…ve','one funder → 22 wallets','bought 68% in block 0']},
+ {t:'CATNIP',v:R,mc:'33K',age:'1m',f:4,why:'copycat of $SNIFF',dig:['dev Ct0…nn','same art as $SNIFF','new wallet · 40s old']},
+ {t:'BELLYRUB',v:W,mc:'205K',age:'11m',pnl:2.80,dig:['dev Br3…uu','funded from CEX','holds 2.4% · LP burned']},
+ {t:'TICK',v:R,mc:'52K',age:'2m',f:5,why:'mint still live',dig:['dev Tk9…zz','mint authority not revoked','can print supply']},
+ {t:'GOODBOY',v:W,mc:'447K',age:'22m',pnl:5.49,dig:['dev Gb7…aa','2-year-old wallet','fair launch · top10 13%']},
+];
+const T0=1.0,CD=2.4,TEND=T0+CD*C.length,TOUT=TEND+.3;
+// station anchor points (where the chip lands)
+const ST={SNIFF:[300,300],DIG:[300,570],BARK:[1000,404],BURY:[300,830],FETCH:[780,570],DOG:[540,470]};
+// ---- big front-facing neon dog ----
+function dogSVG(id){return `<svg viewBox="0 0 240 300" width="100%" height="100%" style="overflow:visible">
+<defs>
+ <filter id="g${id}" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="gg${id}" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <radialGradient id="ey${id}" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="var(--e1,#ffb340)"/><stop offset="1" stop-color="var(--e2,#ff6a00)"/></radialGradient>
+ <linearGradient id="gold${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a8"/><stop offset=".5" stop-color="#ffd84a"/><stop offset="1" stop-color="#c98a10"/></linearGradient>
+</defs>
+<g id="tail${id}"><path d="M176,262 C214,250 226,212 214,182" fill="none" stroke="#ffb340" stroke-width="15" stroke-linecap="round" filter="url(#g${id})"/><path d="M176,262 C214,250 226,212 214,182" fill="none" stroke="#120c07" stroke-width="9" stroke-linecap="round"/></g>
+<path d="M60,290 C50,226 64,168 120,160 C176,168 190,226 180,290 Z" fill="#120c07" stroke="#ffb340" stroke-width="3.2" filter="url(#g${id})"/>
+<path d="M96,206 C104,236 136,236 144,206 C138,250 102,250 96,206 Z" fill="#f2dcb6" opacity=".92"/>
+<!-- gold chain + pendant -->
+<path d="M78,196 Q120,232 162,196" fill="none" stroke="url(#gold${id})" stroke-width="5" stroke-dasharray="7 3" filter="url(#g${id})"/>
+<g id="pend${id}"><circle cx="120" cy="230" r="17" fill="url(#gold${id})" stroke="#fff3a8" stroke-width="1.5" filter="url(#gg${id})"/><text x="120" y="234" text-anchor="middle" font-family="RB" font-weight="900" font-size="10" fill="#4a3208">$SNIFF</text></g>
+<ellipse cx="92" cy="290" rx="22" ry="12" fill="#120c07" stroke="#ffb340" stroke-width="3"/><ellipse cx="148" cy="290" rx="22" ry="12" fill="#120c07" stroke="#ffb340" stroke-width="3"/>
+<g id="pl${id}"><path d="M82,286 l0,-7 M92,284 l0,-8 M102,286 l0,-7" stroke="#ffb340" stroke-width="1.6"/></g>
+<g id="hd${id}">
+ <g id="el${id}"><path d="M66,72 C38,78 26,128 36,176 C44,190 66,184 74,164 C80,132 82,98 66,72 Z" fill="#2a1a0c" stroke="#ffb340" stroke-width="3" filter="url(#g${id})"/></g>
+ <g id="er${id}"><path d="M174,72 C202,78 214,128 204,176 C196,190 174,184 166,164 C160,132 158,98 174,72 Z" fill="#2a1a0c" stroke="#ffb340" stroke-width="3" filter="url(#g${id})"/></g>
+ <path d="M120,48 C168,48 186,82 184,120 C182,158 160,182 120,184 C80,182 58,158 56,120 C54,82 72,48 120,48 Z" fill="#120c07" stroke="#ffb340" stroke-width="3.2" filter="url(#g${id})"/>
+ <path d="M120,52 L120,92" stroke="#ff8a1f" stroke-width="2" opacity=".35"/>
+ <ellipse cx="92" cy="86" rx="8" ry="5" fill="#ffb340" opacity=".85"/><ellipse cx="148" cy="86" rx="8" ry="5" fill="#ffb340" opacity=".85"/>
+ <g id="eyes${id}" filter="url(#gg${id})"><g class="eo"><ellipse cx="94" cy="108" rx="15" ry="17" fill="url(#ey${id})"/><ellipse cx="146" cy="108" rx="15" ry="17" fill="url(#ey${id})"/>
+  <circle class="pu" cx="95" cy="110" r="6.5" fill="#0a0604"/><circle class="pu" cx="147" cy="110" r="6.5" fill="#0a0604"/><circle cx="90" cy="103" r="3" fill="#fff"/><circle cx="142" cy="103" r="3" fill="#fff"/></g>
+  <g class="eh" style="display:none"><path d="M80,112 Q94,94 108,112" stroke="#3fffc8" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M132,112 Q146,94 160,112" stroke="#3fffc8" stroke-width="6" fill="none" stroke-linecap="round"/></g></g>
+ <g class="eb" style="display:none"><path d="M76,86 L108,96" stroke="#ff4d5e" stroke-width="5" stroke-linecap="round"/><path d="M164,86 L132,96" stroke="#ff4d5e" stroke-width="5" stroke-linecap="round"/></g>
+ <ellipse cx="120" cy="150" rx="40" ry="28" fill="#f2dcb6" stroke="#ffb340" stroke-width="2"/>
+ <g id="nose${id}"><path d="M104,136 C104,126 136,126 136,136 C136,146 126,152 120,152 C114,152 104,146 104,136 Z" fill="#0a0604" stroke="#3a2a1a" stroke-width="1.5"/><ellipse cx="114" cy="133" rx="5" ry="2.5" fill="#fff" opacity=".75"/></g>
+ <path d="M120,152 L120,160" stroke="#0a0604" stroke-width="2.4"/>
+ <path class="mc" d="M100,160 Q110,170 120,160 Q130,170 140,160" fill="none" stroke="#0a0604" stroke-width="2.6" stroke-linecap="round"/>
+ <path class="mopen" d="M100,160 Q120,198 140,160 Q120,170 100,160 Z" fill="#6a1420" stroke="#0a0604" stroke-width="2.4" style="display:none"/>
+ <path class="tongue" d="M112,164 Q112,190 120,192 Q128,190 128,164 Z" fill="#ff7a9a" stroke="#d24a6a" stroke-width="1.5" style="display:none"/>
+ <g id="shades${id}" style="display:none"><rect x="70" y="96" width="44" height="22" rx="3" fill="#050505" stroke="#ffd84a" stroke-width="2"/><rect x="126" y="96" width="44" height="22" rx="3" fill="#050505" stroke="#ffd84a" stroke-width="2"/><rect x="112" y="102" width="16" height="5" fill="#050505" stroke="#ffd84a" stroke-width="1.5"/><path d="M76,100 l10,0 M132,100 l10,0" stroke="#fff" stroke-width="2.5" opacity=".8"/></g>
+</g></svg>`}
+$('dogW').innerHTML=dogSVG('d');$('oDog').innerHTML=dogSVG('o');
+function poseDog(id,st,t,lean,shadesY){const root=document.getElementById('hd'+id).ownerSVGElement;const q=s=>root.querySelector(s);
+ const col={idle:['#ffb340','#ff6a00'],sniff:['#fff0a0','#ffb000'],dig:['#ffd080','#ff8a1f'],bark:['#ff6b78','#d2142b'],happy:['#3fffc8','#0fbf8a']}[st]||['#ffb340','#ff6a00'];
+ root.style.setProperty('--e1',col[0]);root.style.setProperty('--e2',col[1]);
+ const happy=st=='happy';q('.eo').style.display=happy?'none':'';q('.eh').style.display=happy?'':'none';q('.eb').style.display=st=='bark'?'':'none';
+ const barkOpen=st=='bark'&&Math.sin(t*20)>-.2;q('.mopen').style.display=barkOpen||happy?'':'none';q('.mc').style.display=barkOpen||happy?'none':'';q('.tongue').style.display=happy?'':'none';
+ const bl=(t%3.2)<.1&&st=='idle';q('.eo').setAttribute('transform',`translate(0,108) scale(1,${st=='sniff'?.55:bl?.1:1}) translate(0,-108)`);
+ root.querySelectorAll('.pu').forEach(p=>p.setAttribute('transform',`translate(${lean*6+(st=='sniff'?Math.sin(t*9)*2:0)},${st=='dig'?4:0})`));
+ const hr=st=='sniff'?lean*10+Math.sin(t*14)*3:st=='bark'?Math.sin(t*20)*3:st=='dig'?lean*6:lean*4+Math.sin(t*1.4)*3;
+ const hy=st=='sniff'?8:st=='dig'?12:st=='bark'?-6+Math.sin(t*20)*2:Math.sin(t*2)*2;
+ q('#hd'+id).setAttribute('transform',`translate(${lean*8},${hy}) rotate(${hr} 120 170)`);
+ q('#nose'+id).setAttribute('transform',st=='sniff'?`translate(${Math.sin(t*38)*1.6},${Math.cos(t*31)*1.2}) scale(${1+Math.abs(Math.sin(t*19))*.06})`:'');
+ const ef=st=='bark'?Math.sin(t*20)*10:st=='happy'?Math.sin(t*12)*8:Math.sin(t*2)*3;
+ q('#el'+id).setAttribute('transform',`rotate(${ef} 66 76)`);q('#er'+id).setAttribute('transform',`rotate(${-ef} 174 76)`);
+ q('#tail'+id).setAttribute('transform',`rotate(${(st=='happy'?Math.sin(t*28)*26:Math.sin(t*9)*10)} 176 262)`);
+ q('#pl'+id).setAttribute('transform',st=='dig'?`translate(0,${Math.sin(t*34)*5})`:'');
+ const sh=q('#shades'+id);if(shadesY===null){sh.style.display='none'}else{sh.style.display='';sh.setAttribute('transform',`translate(0,${shadesY})`)}
+ q('#pend'+id).setAttribute('transform',`rotate(${Math.sin(t*3)*6} 120 210)`)}
+// phases
+const PH=[['sniff',0,.6],['dig',.6,1.2],['bark',1.2,1.78],['end',1.78,2.4]];
+function phase(u){for(const p of PH)if(u>=p[1]&&u<p[2])return {n:p[0],f:(u-p[1])/(p[2]-p[1])};return {n:'end',f:1}}
+// streams
+const SN=['sniff 0x7f…','dev hop 2','funder ok','LP?','mint?','bundle?','woof','bone +','tax 0%','holders ↑','fresh wallet','cex in','block 0','tp 2x','bury'];
+const LN=[];{const r=rng(5);[168,438,706,970,1292].forEach((y,i)=>{let s='';for(let k=0;k<26;k++)s+=SN[Math.floor(r()*SN.length)]+'  ·  ';LN.push({y,dir:i%2?-1:1,sp:60+r()*100,s,ph:r()*2000,col:['#ffb340','#3fffc8','#ff4d5e'][i%3]})})}
+$('streams').innerHTML=LN.map((l,i)=>`<div class="abs" id="ln${i}" style="top:${l.y}px;white-space:nowrap;font-size:11px;font-weight:700;letter-spacing:1px;color:${l.col};opacity:.07">${l.s+l.s}</div>`).join('');
+$('flags').innerHTML=FL.map((f,i)=>`<div class="fl" id="fl${i}" style="left:${(i%2)*164}px;top:${Math.floor(i/2)*36}px">${f}</div>`).join('');
+const LOG=[];{LOG.push({t:.05,s:'<span class="a">rgk@rughound</span>:~$ ./sniff --pump --live'});LOG.push({t:.4,s:'<span class="m">U・ᴥ・U  nose on · tail on · 0 rugs held</span>'});
+ const r=rng(9);let tt=.7;while(tt<TEND){LOG.push({t:tt,s:`<span class="d">sniff ${Math.floor(r()*36**5).toString(36)}… ${['clean scent','skip','weird smell','clean scent','skip'][Math.floor(r()*5)]}</span>`});tt+=.17+r()*.12}
+ C.forEach((c,k)=>{const s=T0+k*CD;LOG.push({t:s+.1,s:`<span class="a">[sniff]</span> $${c.t} mc ${c.mc} age ${c.age}`});
+  c.dig.forEach((d,j)=>LOG.push({t:s+.7+j*.15,s:`<span class="c">[dig]</span> ${d}`}));
+  LOG.push({t:s+1.4,s:c.v==R?`<span class="r">[bark] WOOF · ${c.why}</span>`:`<span class="m">[bark] no flags · tail wag</span>`});
+  LOG.push({t:s+1.95,s:c.v==R?`<span class="r">[bury] $${c.t} → backyard · 0 SOL in</span>`:`<span class="m">[fetch] ape 0.5 → tp 2x/4x → +${c.pnl.toFixed(2)} SOL</span>`})});LOG.sort((a,b)=>a.t-b.t)}
+function pnlAt(t){let p=0;C.forEach((c,k)=>{if(c.v==W)p+=c.pnl*eo(clamp((t-(T0+k*CD+1.95))/.3))});return p}
+function bone(x,y,s,col){return `<g transform="translate(${x},${y}) scale(${s})"><rect x="-14" y="-4" width="28" height="8" rx="4" fill="${col}"/><circle cx="-14" cy="-5" r="5" fill="${col}"/><circle cx="-14" cy="5" r="5" fill="${col}"/><circle cx="14" cy="-5" r="5" fill="${col}"/><circle cx="14" cy="5" r="5" fill="${col}"/></g>`}
+
+function render(t){
+ const tt=Math.min(t,TEND);const k=tt<T0?-1:Math.min(C.length-1,Math.floor((tt-T0)/CD));const u=k<0?0:tt-T0-k*CD;const c=k>=0?C[k]:null;const P=c?phase(u):{n:'boot',f:0};const pn=P.n;
+ const done=i=>i<k||(i==k&&pn=='end'&&P.f>.35);
+ LN.forEach((l,i)=>{const w=2000,x=((t*l.sp+l.ph)%w);$('ln'+i).style.transform=`translateX(${l.dir>0?x-w:-x}px)`});
+ $('k1').textContent=fmt(lerp(0,41206,Math.pow(clamp(tt/TEND),1.05)));
+ const nR=C.filter((x,i)=>x.v==R&&done(i)).length,nW=C.filter((x,i)=>x.v==W&&done(i)).length;$('k2').textContent=nR;$('k3').textContent=nW;
+ const pnl=pnlAt(tt);$('k4').textContent='+'+pnl.toFixed(2);$('pnlTag').textContent='+'+pnl.toFixed(2)+' SOL';
+ $('pnlCard').style.boxShadow=c&&c.v==W&&pn=='end'&&P.f>.3?'0 0 0 1px #ffb340,0 0 30px rgba(255,179,64,.6)':'none';
+ ['SNIFF','DIG','BARK','BURY','FETCH'].forEach(s=>$('s'+s).className='panel');
+ if(c){if(pn=='sniff')$('sSNIFF').className='panel on';if(pn=='dig')$('sDIG').className='panel on';if(pn=='bark')$('sBARK').className='panel '+(c.v==R?'onr':'ong');if(pn=='end')$(c.v==R?'sBURY':'sFETCH').className='panel '+(c.v==R?'onr':'ong')}
+ // SNIFF panel
+ let sc='';for(let l=0;l<3;l++){let d='';for(let x=0;x<=320;x+=4){const y=31+Math.sin(x*.05+t*(4+l)+l*2)*(9+(pn=='sniff'?14:3))*Math.sin(x*.012+l);d+=(x?'L':'M')+x+','+y.toFixed(1)}sc+=`<path d="${d}" fill="none" stroke="${['#ffb340','#3fffc8','#f2dcb6'][l]}" stroke-width="1.5" opacity="${.5+.2*l}"/>`}
+ $('scent').innerHTML=sc;
+ const pr=[];for(let j=0;j<6;j++){const ii=Math.max(k,0)+j;if(ii<C.length)pr.push([C[ii],j==0&&k>=0]);else{const r=rng(ii*7+99);pr.push([{t:'0x'+Math.floor(r()*1e6).toString(16),mc:(10+Math.floor(r()*90))+'K',age:Math.floor(r()*9)+'m'},false])}}
+ $('pairs').innerHTML=pr.map(([x,cur])=>`<div class="row" style="${cur?'background:rgba(255,179,64,.16);color:#fff;':''}"><span>${cur?'▸ ':'  '}$${x.t}</span><span class="d">mc ${x.mc}</span><span class="d">${x.age}</span></div>`).join('');
+ $('sniffTag').textContent=pn=='sniff'?'sniff sniff…':'nose on';
+ // DIG panel
+ let dg='';['#2a1c0e','#3a2612','#4a3018'].forEach((col,i)=>dg+=`<rect x="10" y="${36+i*62}" width="320" height="62" fill="${col}" opacity=".55"/>`);dg+=`<rect x="10" y="18" width="320" height="18" fill="#3a5a2a" opacity=".5"/>`;
+ if(c){const df=pn=='dig'?P.f:(['bark','end'].includes(pn)?1:0);const depth=df*3.2;
+  c.dig.forEach((ln,j)=>{if(depth<j+.2)return;const a=clamp(depth-j);const y=66+j*62;const bad=c.v==R&&j==2;
+   dg+=`<circle cx="36" cy="${y}" r="7" fill="${bad?'#ff4d5e':j==0?'#ffb340':'#f2dcb6'}" opacity="${a}"/>${j?`<line x1="36" y1="${y-55}" x2="36" y2="${y-7}" stroke="#ffb340" stroke-dasharray="3 3" opacity="${a}"/>`:''}
+   <text x="54" y="${y+4}" font-size="12" font-family="JB" font-weight="${bad?800:700}" fill="${bad?'#ff6b78':c.v==W&&j==2?'#3fffc8':'#f5ecdf'}" opacity="${a}">${ln}</text>`});
+  if(pn=='dig')for(let s=0;s<16;s++){const r=rng(Math.floor(t*20)+s);dg+=`<circle cx="${170+(r()-.5)*280}" cy="${24+r()*40}" r="${2+r()*3}" fill="#8a6036" opacity=".85"/>`}}
+ $('dig').innerHTML=dg;$('digTag').textContent=pn=='dig'?'digging…':c&&['bark','end'].includes(pn)?(c.v==R?'dirt found':'clean dirt'):'idle';
+ // BARK panel
+ FL.forEach((f,i)=>{const e=$('fl'+i);let cl='fl';if(c&&(pn=='bark'||pn=='end')){const chk=pn=='bark'?clamp(P.f*1.7)*8:8;if(i<chk)cl+=(c.v==R&&c.f==i)?' hit':' ok'}e.className=cl;e.textContent=(cl.includes('hit')?'🚩 ':cl.includes('ok')?'✓ ':'○ ')+f});
+ const bb=$('barkBig'),bs=$('barkSub');if(c&&(pn=='bark'&&P.f>.5||pn=='end')){bb.textContent=c.v==R?'WOOF!':'*wag*';bb.style.color=c.v==R?'#ff4d5e':'#3fffc8';bb.style.textShadow=`0 0 18px ${c.v==R?'#ff4d5e':'#3fffc8'}`;bs.innerHTML=c.v==R?`<span class="r">${c.why}</span>`:'<span class="m">no red flags · score 0.9+</span>'}else{bb.textContent='';bs.textContent=''}
+ $('barkTag').textContent=pn=='bark'?'checking…':'quiet';
+ // BURY panel
+ let yd=`<rect x="0" y="182" width="340" height="44" fill="#2a3a1a" opacity=".55"/>`;for(let g=0;g<30;g++){const r=rng(g+3);yd+=`<path d="M${r()*340},184 l3,-9 l3,9" stroke="#4a7a2a" fill="none" opacity=".7"/>`}
+ const buried=C.filter((x,i)=>x.v==R&&(i<k||(i==k&&pn=='end'&&P.f>.35)));
+ buried.forEach((x,j)=>{const cx=58+(j%3)*112,cy=46+Math.floor(j/3)*84;const isNew=x===c;const a=isNew?eo(clamp((P.f-.35)/.3)):1;
+  yd+=`<g opacity="${a}"><ellipse cx="${cx}" cy="${cy+26}" rx="42" ry="11" fill="#5a3a1c"/>${bone(cx,cy+(1-a)*-30,1.1,'#f2dcb6')}<text x="${cx}" y="${cy+52}" text-anchor="middle" font-size="11" font-weight="800" font-family="JB" fill="#ff6b78">$${x.t}</text><text x="${cx}" y="${cy+65}" text-anchor="middle" font-size="8.5" font-family="JB" fill="#9a8a72">${x.why}</text></g>`});
+ if(c&&c.v==R&&pn=='end'&&P.f<.6)for(let s=0;s<14;s++){const r=rng(Math.floor(t*20)+s+50);yd+=`<circle cx="${40+r()*260}" cy="${10+r()*60}" r="${2+r()*3}" fill="#8a6036"/>`}
+ $('yard').innerHTML=yd;$('buryTag').textContent=buried.length+' buried';
+ // FETCH panel
+ const fs=c&&c.v==W&&pn=='end'?P.f:0;$('ladder').innerHTML=[['2×','40%'],['4×','35%'],['9×','15%'],['moon','10%']].map(([a,b],i)=>`<div class="row"><span class="m">tp ${a}</span><span style="flex:1;margin:0 10px;height:6px;border-radius:3px;background:rgba(255,255,255,.07);position:relative"><i style="position:absolute;left:0;top:0;bottom:0;border-radius:3px;width:${clamp(fs*4-i)*100}%;background:#3fffc8;box-shadow:0 0 6px #3fffc8"></i></span><span class="d">${b}</span></div>`).join('');
+ const fe=C.filter((x,i)=>x.v==W&&(i<k||(i==k&&pn=='end'&&P.f>.35)));$('fetchTag').textContent=fe.length+' fetched';
+ $('fetched').innerHTML=fe.map(x=>`<div class="row"><span>🦴 $${x.t}</span><span class="m">+${x.pnl.toFixed(2)} SOL</span></div>`).join('')||'<div class="d" style="font-size:11px">no bones yet</div>';
+ // bowl
+ const fill=clamp(pnl/16.24);let bw=`<path d="M20,90 L280,90 L250,190 L50,190 Z" fill="#1a120a" stroke="#ffb340" stroke-width="3" style="filter:drop-shadow(0 0 6px rgba(255,179,64,.5))"/><text x="150" y="150" text-anchor="middle" font-family="RB" font-weight="900" font-size="30" fill="#ffb340">$SNIFF</text>`;
+ for(let i=0;i<Math.floor(fill*48);i++){const r=rng(i+200);bw+=`<circle cx="${40+r()*220}" cy="${88-r()*44*fill-3}" r="${5+r()*3}" fill="${['#c98a3a','#a86a2a','#e0a050'][i%3]}"/>`}
+ $('bowl').innerHTML=bw;$('bowlTag').textContent=(fill*100).toFixed(0)+'% full';
+ // center
+ if(c){$('caseTag').textContent=`${String(k+1).padStart(2,'0')}/${C.length}`;$('tk').textContent='$'+c.t;$('tm').textContent=`pump.fun · mc ${c.mc} · age ${c.age}`}
+ const vd=$('verdict');if(c&&pn=='end'){const a=eo(clamp(P.f/.15));vd.style.opacity=a;vd.style.transform=`scale(${lerp(1.3,1,a)})`;
+  if(c.v==R){vd.textContent='RUG · BURY IT';vd.style.color='#ff6b78';vd.style.border='2px solid #ff4d5e';vd.style.background='rgba(40,6,10,.92)';vd.style.boxShadow='0 0 22px rgba(255,77,94,.55)'}
+  else{vd.textContent=`GOOD COIN · +${c.pnl.toFixed(2)}`;vd.style.color='#3fffc8';vd.style.border='2px solid #3fffc8';vd.style.background='rgba(4,30,22,.92)';vd.style.boxShadow='0 0 22px rgba(63,255,200,.5)'}}else vd.style.opacity=0;
+ const stp=['SNIFF','DIG','BARK',c&&c.v==W?'FETCH':'BURY'];const cur=c?['sniff','dig','bark','end'].indexOf(pn):-1;
+ $('steps').innerHTML=`<div style="display:flex;justify-content:space-between">${stp.map((s,i)=>`<span style="padding:2px 8px;border-radius:5px;border:1px solid ${i==cur?'#ffb340':'#3a2d1c'};color:${i<cur?'#9a8a72':i==cur?'#ffb340':'#5e5240'};${i==cur?'background:rgba(255,179,64,.14)':''}">${i<cur?'✓ ':''}${s}</span>`).join('')}</div>`;
+ const cnt=n=>C.filter((x,i)=>i<k||(i==k&&(['sniff','dig','bark','end'].indexOf(pn)>=n))).length;
+ $('tasks').innerHTML=[['🐽 sniffed',fmt(lerp(0,41206,Math.pow(clamp(tt/TEND),1.05)))+' pairs'],['⛏ dug',cnt(1)+' dev wallets'],['📣 barked',nR+(c&&c.v==R&&(pn=='bark'||pn=='end')&&!done(k)?1:0)+' times'],['🦴 buried / fetched',nR+' / '+nW]].map(([a,b])=>`<div class="row"><span class="d">${a}</span><span>${b}</span></div>`).join('');
+ // dog pose
+ let st='idle',lean=0,shY=null;const side={sniff:-1,dig:-1,bark:1,end:c&&c.v==R?-1:1}[pn]||0;
+ if(c){st=pn=='sniff'?'sniff':pn=='dig'?'dig':pn=='bark'?(c.v==R&&P.f>.45?'bark':'sniff'):(c.v==R?'dig':'happy');lean=side}
+ if(c&&c.v==W&&pn=='end')shY=lerp(-170,0,eo(clamp(P.f/.35)));
+ poseDog('d',st,t,lean,shY);
+ const hop=c&&P.f<.15?Math.sin(P.f/.15*Math.PI)*-18:0;const dw=$('dogW');dw.style.transform=`translate(${lean*14}px,${hop+(st=='happy'?-Math.abs(Math.sin(t*9))*14:0)}px) rotate(${lean*2}deg)`;
+ // bubble
+ let bt='',bc='#ffb340';if(!c)bt='*sniff*';else if(pn=='sniff')bt='sniff sniff…';else if(pn=='dig')bt='dig dig dig';else if(pn=='bark'){bt=c.v==R?(P.f>.45?'WOOF! WOOF!':'grrr…'):'smells clean';bc=c.v==R?'#ff4d5e':'#3fffc8'}else{bt=c.v==R?'bury it.':'fetched! 😎';bc=c.v==R?'#ff4d5e':'#3fffc8'}
+ const b=$('bub');b.textContent=bt;b.style.borderColor=bc;b.style.color=bc;b.style.boxShadow=`0 0 12px ${bc}`;b.style.left=(side<0?400:560)+'px';b.style.top=(306+hop)+'px';
+ // chip flow: station → dog → station
+ let ch='',fx='';
+ if(c){const from={sniff:ST.SNIFF,dig:ST.DOG,bark:ST.DOG,end:ST.DOG}[pn];
+  const target={sniff:ST.DOG,dig:ST.DIG,bark:ST.BARK,end:c.v==R?ST.BURY:ST.FETCH}[pn];
+  let pos,trail=[];const prevSt={sniff:ST.SNIFF,dig:ST.DOG,bark:ST.DIG,end:ST.BARK}[pn];
+  // each phase: first 28% chip flies from previous station to the dog, then out to this phase's station
+  const f=P.f;let A,B,uu;
+  if(pn=='sniff'){if(f<.45){pos=ST.SNIFF}else{A=ST.SNIFF;B=ST.DOG;uu=eio(clamp((f-.45)/.4))}}
+  else{if(f<.4){A=ST.DOG;B=target;uu=eio(clamp(f/.4))}else{pos=target}}
+  if(A){pos=bez(A,[(A[0]+B[0])/2,Math.min(A[1],B[1])-90],B,uu);for(let s=1;s<12;s++){const q=bez(A,[(A[0]+B[0])/2,Math.min(A[1],B[1])-90],B,clamp(uu-s*.035));fx+=`<text x="${q[0]}" y="${q[1]}" font-family="JB" font-size="${11-s*.5}" font-weight="800" fill="${c.v==R&&pn!='sniff'&&pn!='dig'?'#ff4d5e':'#ffb340'}" opacity="${(1-s/12)*.8}">${['0x','ff','$','1','0','a9'][s%6]}</text>`}}
+  const red=c.v==R&&(pn=='end'||pn=='bark'&&P.f>.45);
+  ch=`<div class="chip" style="left:${pos[0]-40}px;top:${pos[1]-14}px;${red?'border-color:#ff4d5e;box-shadow:0 0 14px rgba(255,77,94,.8)':c.v==W&&pn=='end'?'border-color:#3fffc8;box-shadow:0 0 14px rgba(63,255,200,.8)':''}">${red&&pn=='end'?'☠ ':''}${c.v==W&&pn=='end'?'🦴 ':''}$${c.t}</div>`}
+ $('chips').innerHTML=ch;
+ // dog fx
+ if(c&&st=='bark')for(let w=0;w<3;w++){const ph=(t*2.6+w/3)%1;const r=40+ph*120;fx+=`<path d="M${540+Math.cos(-.7)*r},${440+Math.sin(-.7)*r} A${r},${r} 0 0,1 ${540+Math.cos(.7)*r},${440+Math.sin(.7)*r}" fill="none" stroke="#ff4d5e" stroke-width="4" opacity="${(1-ph)*.9}" transform="translate(40,0)"/>`}
+ if(c&&st=='sniff')for(let s=0;s<6;s++){const ph=(t*1.4+s/6)%1;const sx=(lean<0?300:780)*(1-ph)+540*ph,sy=lerp(lean<0?300:300,440,ph)+Math.sin(ph*12+s)*10;fx+=`<circle cx="${sx}" cy="${sy}" r="${3+ph*3}" fill="none" stroke="#fff0a0" stroke-width="1.5" opacity="${Math.sin(ph*Math.PI)*.8}"/>`}
+ if(c&&st=='dig')for(let s=0;s<18;s++){const r=rng(Math.floor(t*24)+s+500);fx+=`<circle cx="${470+r()*140}" cy="${640-r()*60}" r="${2+r()*4}" fill="#8a6036" opacity=".9"/>`}
+ if(c&&st=='happy'&&P.f<.6)for(let s=0;s<14;s++){const r=rng(k*40+s);const a=s/14*6.283,d=P.f*220;fx+=`<circle cx="${540+Math.cos(a)*d}" cy="${450+Math.sin(a)*d}" r="4" fill="${s%2?'#3fffc8':'#ffd84a'}" opacity="${1-P.f/.6}"/>`}
+ $('dfx').innerHTML=fx;
+ // chart
+ const W_=500,H=258;const Y=v=>H-14-v/18*(H-30);let grid='';for(let g=0;g<=18;g+=6)grid+=`<line x1="0" x2="${W_}" y1="${Y(g)}" y2="${Y(g)}" stroke="#2a2116"/><text x="${W_-2}" y="${Y(g)-4}" text-anchor="end" font-size="9" font-family="JB" fill="#5e5240">${g}</text>`;
+ let d='';const N=120;for(let i=0;i<=N;i++){const t2=i/N*TEND;if(t2>tt)break;const v=pnlAt(t2)+Math.sin(t2*3)*.2;d+=(i?'L':'M')+(i/N*W_).toFixed(1)+','+Y(v).toFixed(1)}
+ const last=d?d.split(/[ML]/).pop().split(','):null;let mk='';C.forEach((x,i)=>{const at=T0+i*CD+1.95;if(at>tt)return;const xx=at/TEND*W_;mk+=x.v==W?bone(xx,Y(pnlAt(at+.4))-16,.45,'#3fffc8'):`<text x="${xx}" y="${H-2}" text-anchor="middle" font-size="9" fill="#ff4d5e">✕</text>`});
+ $('chart').innerHTML=grid+mk+(d?`<path d="${d} L${last[0]},${H-14} L0,${H-14} Z" fill="rgba(255,179,64,.08)"/><path d="${d}" fill="none" stroke="#ffb340" stroke-width="2.4" style="filter:drop-shadow(0 0 4px #ffb340)"/><circle cx="${last[0]}" cy="${last[1]}" r="4" fill="#fff"/>`:'');
+ $('log').innerHTML=LOG.filter(e=>e.t<=tt).slice(-17).map(e=>e.s).join('\n');$('lps').textContent=Math.round(9+Math.abs(Math.sin(t*2))*6)+' l/s';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ let fl=0,fc='255,77,94',sx=0,sy=0;if(c&&st=='bark'&&P.f<.75){const a=1-(P.f-.45)/.3;fl=.14*a;sx=Math.sin(t*90)*6*a;sy=Math.cos(t*70)*4*a}
+ if(c&&c.v==W&&pn=='end'&&P.f<.3){fl=.12*(1-P.f/.3);fc='63,255,200'}
+ $('flash').style.opacity=fl;$('flash').style.background=`radial-gradient(circle at 50% 40%,rgba(${fc},0),rgba(${fc},.85))`;
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;const app=$('app');app.style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';app.style.transform=`translate(${sx}px,${sy}px)`;if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){[['o1',0],['o2',.25],['o3',.45],['o4',.85],['o5',1.05],['o6',1.15],['o7',1.45],['o8',1.65],['o9',1.75]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`+(id=='o1'?` scale(${lerp(.7,1,v)})`:'')});
+ const ca=eo(clamp((s-.2)/.6));const od=$('oDog');od.style.opacity=ca;od.style.transform=`translateY(${(1-ca)*60-Math.abs(Math.sin(s*5))*10}px)`;
+ poseDog('o','happy',t,0,lerp(-200,0,eo(clamp((s-.9)/.4))));
+ let g=`<defs><radialGradient id="ob" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#ffb340" stop-opacity=".2"/><stop offset=".6" stop-color="#3fffc8" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="1080" height="1350" fill="url(#ob)"/>`;
+ for(let i=0;i<18;i++){const r=rng(800+i);const ph=(s*.3+r())%1;g+=`<g opacity="${.22*(1-ph)}">${bone(r()*1080,1350-ph*1500,1+r()*1.5,i%2?'#ffb340':'#f2dcb6')}</g>`}
+ $('oBg').innerHTML=g}
+window.render=render;
+Promise.all(['700 13px JB','800 12px JB','900 40px RB','700 28px RB','400 12px JB'].map(f=>document.fonts.load(f))).then(()=>document.fonts.ready).then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>
