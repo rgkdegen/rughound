@@ -1,0 +1,230 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SNIFF K9 · pump.fun customs</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+:root{--bg:#070a10;--pan:rgba(12,17,26,.94);--bd:#1e2a3c;--bd2:#2c3e58;--tx:#eef3fa;--dim:#7f8da3;--dim2:#46536a;
+ --bl:#7ab8ff;--cy:#5ff0ff;--am:#ffb340;--rd:#ff3d50;--gr:#4dff9a;--gd:#ffd84a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:JB,monospace;color:var(--tx);font-size:12px}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(600px 400px at 540px 480px,rgba(122,184,255,.12),transparent 70%),
+ radial-gradient(700px 500px at 100% 0%,rgba(255,179,64,.06),transparent 70%),var(--bg)}
+#app::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(122,184,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(122,184,255,.035) 1px,transparent 1px);background-size:24px 24px}
+.abs{position:absolute}
+.panel{position:absolute;background:var(--pan);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.ph{position:absolute;left:12px;top:9px;font-size:11.5px;font-weight:800;letter-spacing:.7px}
+.pt{position:absolute;right:12px;top:10px;font-size:10px}
+.b{color:var(--bl)}.c{color:var(--cy)}.a{color:var(--am)}.r{color:#ff6b7a}.g{color:var(--gr)}.d{color:var(--dim)}.y{color:var(--gd)}
+.row{display:flex;justify-content:space-between;height:24px;align-items:center;font-size:11px;border-bottom:1px solid #182234;padding:0 4px}
+.fb{display:inline-block;background:#0b0f16;border:1px solid #1f2b3d;border-radius:3px;margin-right:2px;width:15px;height:22px;line-height:22px;text-align:center;font-weight:800;font-size:13px;color:#ffe9a8;position:relative}
+.fb::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.3px;white-space:pre}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#outro{position:absolute;inset:0;z-index:70;opacity:0}
+#outro .cc{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div class="abs" style="left:18px;top:12px;font-family:RB;font-weight:900;font-size:36px;color:var(--bl);letter-spacing:1px;text-shadow:0 0 16px rgba(122,184,255,.6)">SNIFF<span style="color:var(--am);margin-left:10px;text-shadow:0 0 16px rgba(255,179,64,.6)">K9</span></div>
+ <div class="abs" style="left:202px;top:20px;padding:3px 12px;border:1.5px solid var(--gd);border-radius:7px;font-size:16px;font-weight:800;color:var(--gd);background:rgba(255,216,74,.1);box-shadow:0 0 12px rgba(255,216,74,.35)">$SNIFF</div>
+ <div class="abs d" style="left:320px;top:26px;font-size:11px">pump.fun customs · terminal 0x · every bag gets sniffed</div>
+ <div class="abs" style="right:18px;top:24px;font-size:13px;font-weight:800;color:var(--am)">built by RUGIKK</div>
+
+ <!-- departures board -->
+ <div class="panel" style="left:16px;top:64px;width:1048px;height:206px;background:#06090e;border-color:#2a3446">
+  <div class="ph y" style="font-size:13px">✈ DEPARTURES</div><div class="pt d" id="clock">10:06</div>
+  <div class="abs d" style="left:16px;top:36px;font-size:10px;letter-spacing:1px;display:flex;gap:0"><span style="width:110px">TIME</span><span style="width:250px">FLIGHT</span><span style="width:200px">TO</span><span style="width:110px">GATE</span><span>STATUS</span></div>
+  <div id="board" class="abs" style="left:16px;top:58px;right:16px"></div>
+ </div>
+
+ <!-- scene -->
+ <svg id="scene" class="abs" width="1080" height="440" style="left:0;top:276px"></svg>
+ <div id="dogW" class="abs" style="left:742px;top:300px;width:240px;height:300px;z-index:6;transform-origin:120px 280px"></div>
+ <svg id="fg" class="abs" width="1080" height="440" style="left:0;top:276px;z-index:8"></svg>
+ <div id="bub" class="abs" style="z-index:12;padding:4px 10px;border:1.5px solid var(--am);border-radius:8px;font-size:14px;font-weight:800;background:rgba(8,10,16,.92);white-space:nowrap"></div>
+
+ <!-- middle panels -->
+ <div class="panel" style="left:16px;top:724px;width:340px;height:240px">
+  <div class="ph r">🚨 SEIZED</div><div class="pt r" id="seizTag">0 bags</div>
+  <div id="seized" class="abs" style="left:12px;right:12px;top:36px"></div>
+ </div>
+ <div class="panel" style="left:370px;top:724px;width:340px;height:240px">
+  <div class="ph c">X-RAY READOUT</div><div class="pt d" id="xrTag">idle</div>
+  <div id="xr" class="abs" style="left:12px;right:12px;top:36px;font-size:11.5px;line-height:23px"></div>
+ </div>
+ <div class="panel" style="left:724px;top:724px;width:340px;height:240px">
+  <div class="ph g">✈ CLEARED · BOARDING PASSES</div><div class="pt g" id="clrTag">0</div>
+  <div id="passes" class="abs" style="left:12px;right:12px;top:34px"></div>
+ </div>
+
+ <!-- bottom -->
+ <div class="panel" style="left:16px;top:976px;width:520px;height:310px">
+  <div class="ph a">SNIFF'S SHIFT</div><div class="pt a" id="pnlTag">+0.00 SOL</div>
+  <div id="kpis" class="abs" style="left:12px;right:12px;top:34px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+  <svg id="chart" class="abs" style="left:10px;top:164px" width="500" height="138"></svg>
+ </div>
+ <div class="panel" style="left:548px;top:976px;width:516px;height:310px">
+  <div class="ph b">customs.log</div><div class="pt d" id="lps"></div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--bl),var(--am));box-shadow:0 0 8px var(--bl)"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">BELT · X-RAY · SNIFF · SEIZE OR CLEAR</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">$SNIFF · simulated run · metrics illustrative · @rgk_degen</div>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oBg" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div class="cc" id="o1" style="top:96px;font-family:RB;font-weight:900;font-size:136px;color:var(--bl);text-shadow:0 0 30px rgba(122,184,255,.8)">SNIFF<span style="color:var(--am);margin-left:24px;text-shadow:0 0 30px rgba(255,179,64,.8)">K9</span></div>
+ <div class="cc" id="o2" style="top:262px"><span style="display:inline-block;padding:6px 22px;border:3px solid var(--gd);border-radius:12px;font-size:40px;font-weight:800;color:var(--gd);box-shadow:0 0 22px rgba(255,216,74,.5)">$SNIFF</span></div>
+ <div class="cc" id="o3" style="top:350px;font-size:20px;font-weight:700">pump.fun customs. every bag gets sniffed.</div>
+ <div id="oDog" class="abs" style="left:400px;top:400px;width:280px;height:350px"></div>
+ <div class="cc" id="o4" style="top:770px;font-size:92px;font-weight:800;color:var(--gr);text-shadow:0 0 26px rgba(77,255,154,.7)">+15.70 SOL</div>
+ <div class="cc" id="o5" style="top:886px;font-size:20px;font-weight:800"><span class="r">6 bags seized</span> &nbsp;·&nbsp; <span class="g">4 flights to the moon</span> &nbsp;·&nbsp; 0 rugs boarded</div>
+ <div class="cc d" id="o6" style="top:928px;font-size:13px">belt → x-ray → sniff → seize / clear · 38,940 bags scanned</div>
+ <div class="cc" id="o7" style="top:984px;font-family:RB;font-weight:900;font-size:54px;color:var(--am);text-shadow:0 0 20px rgba(255,179,64,.7)">nothing gets past Sniff.</div>
+ <div class="cc" id="o8" style="top:1100px;font-family:RB;font-weight:700;font-size:30px;color:var(--am);text-shadow:0 0 14px rgba(255,179,64,.6)">built by RUGIKK</div>
+ <div class="cc d" id="o9" style="top:1146px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+</div>
+<script src="_dog.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const R='rug',W='win';
+const B=[
+ {t:'FETCHME',v:R,mc:'38K',bad:'DEV BAG 38%',why:'dev holds 38%',items:['dev wallet','socials','LP burned']},
+ {t:'WOOFER',v:W,mc:'174K',pnl:3.40,items:['LP burned','fair supply','880 holders']},
+ {t:'SQUIRREL',v:R,mc:'59K',bad:'LP PULL HOOK',why:'LP unlocked',items:['mint revoked','socials','dev wallet']},
+ {t:'FLEABAG',v:R,mc:'92K',bad:'TAX TRAP 99%',why:'99% sell tax',items:['LP burned','holders','socials']},
+ {t:'PAWS',v:W,mc:'211K',pnl:2.95,items:['LP burned','mint revoked','1,020 holders']},
+ {t:'PUPPYMILL',v:R,mc:'77K',bad:'24 WALLETS',why:'71% bundled',items:['LP burned','socials','mint revoked']},
+ {t:'DOGECAT',v:R,mc:'31K',bad:'CLONED ART',why:'copycat',items:['LP burned','dev wallet','holders']},
+ {t:'BISCUIT',v:W,mc:'268K',pnl:4.10,items:['LP burned','old dev','1,410 holders']},
+ {t:'MUTT',v:R,mc:'48K',bad:'MINT KEY',why:'mint still live',items:['LP burned','socials','holders']},
+ {t:'HOWLER',v:W,mc:'455K',pnl:5.25,items:['LP burned','fair launch','2,040 holders']},
+];
+B.forEach((b,i)=>{const r=rng(i+11);b.flight='SN'+(100+Math.floor(r()*899));b.gate=['A','B','C','D'][i%4]+(1+Math.floor(r()*24));b.hue=[20,200,280,330,160,40,300,180,0,120][i]});
+const T0=1.0,CD=2.3,TEND=T0+CD*B.length,TOUT=TEND+.35;
+// scene coords (scene svg local, top=276)
+const BELT_Y=318,XR=[300,640],SNIFF_X=820;
+function bagX(i,t){const s=T0+i*CD;const u=t-s;if(u<-.7)return null;
+ if(u<.7)return lerp(-90,XR[0]-40,eio(clamp((u+.7)/1.4)));if(u<1.3)return lerp(XR[0]-40,XR[1]-20,(u-.7)/.6);if(u<1.6)return lerp(XR[1]-20,SNIFF_X-40,eio((u-1.3)/.3));
+ if(u<1.75)return SNIFF_X-40;return B[i].v==W?lerp(SNIFF_X-40,1150,eio(clamp((u-1.75)/.5))):SNIFF_X-40}
+function bagDrop(i,t){const u=t-(T0+i*CD);if(B[i].v!=R||u<1.75)return 0;return eo(clamp((u-1.75)/.45))*330}
+function suitcase(x,y,b,sc,col,alpha,tag){return `<g transform="translate(${x},${y}) scale(${sc})" opacity="${alpha}">
+ <rect x="22" y="-10" width="36" height="14" rx="5" fill="none" stroke="${col}" stroke-width="4"/>
+ <rect x="0" y="0" width="80" height="58" rx="9" fill="hsl(${b.hue},45%,22%)" stroke="${col}" stroke-width="2.5"/>
+ <rect x="0" y="0" width="80" height="58" rx="9" fill="url(#bagShine)"/>
+ <line x1="26" y1="2" x2="26" y2="56" stroke="rgba(255,255,255,.18)" stroke-width="3"/><line x1="54" y1="2" x2="54" y2="56" stroke="rgba(255,255,255,.18)" stroke-width="3"/>
+ <rect x="10" y="40" width="60" height="14" rx="3" fill="#f2f2e8"/><text x="40" y="51" text-anchor="middle" font-family="JB" font-weight="800" font-size="9.5" fill="#101820">$${b.t.length>8?b.t.slice(0,7)+'…':b.t}</text>
+ ${tag||''}</g>`}
+const LOG=[];{LOG.push({t:.05,s:'<span class="a">rgk@k9</span>:~$ ./sniff --customs --belt pump.fun'});LOG.push({t:.4,s:'<span class="g">U・ᴥ・U  K9 on duty · x-ray warm · 0 rugs boarded</span>'});
+ const r=rng(9);let tt=.7;while(tt<TEND){LOG.push({t:tt,s:`<span class="d">belt ${Math.floor(r()*36**4).toString(36)} … ${['clear','clear','scan','clear','hold'][Math.floor(r()*5)]}</span>`});tt+=.18+r()*.14}
+ B.forEach((b,k)=>{const s=T0+k*CD;LOG.push({t:s,s:`<span class="b">[belt]</span> $${b.t} · flight ${b.flight} · mc ${b.mc}`});
+  LOG.push({t:s+.95,s:b.v==R?`<span class="r">[x-ray] hidden item: ${b.bad}</span>`:`<span class="c">[x-ray] ${b.items.join(' · ')}</span>`});
+  LOG.push({t:s+1.5,s:b.v==R?`<span class="r">[K9] WOOF · ${b.why} · SEIZED</span>`:`<span class="g">[K9] tail wag · CLEARED</span>`});
+  if(b.v==W)LOG.push({t:s+1.95,s:`<span class="g">[gate ${b.gate}] departed → moon · +${b.pnl.toFixed(2)} SOL</span>`})});LOG.sort((a,b)=>a.t-b.t)}
+function pnlAt(t){let p=0;B.forEach((b,k)=>{if(b.v==W)p+=b.pnl*eo(clamp((t-(T0+k*CD+1.95))/.35))});return p}
+$('dogW').innerHTML=dogSVG('d');$('oDog').innerHTML=dogSVG('o');
+// flap text
+function flap(str,len,settle,t,seed,col){const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+.';let o='';for(let i=0;i<len;i++){const ch=str[i]||' ';const done=t>settle+i*.02;
+ let c=ch;if(!done&&t>settle-.35){const r=rng(Math.floor(t*30)+i*7+seed);c=CH[Math.floor(r()*CH.length)]}o+=`<span class="fb" style="${col?'color:'+col+';text-shadow:0 0 6px '+col:''}">${c==' '?'&nbsp;':c}</span>`}return o}
+
+function render(t){
+ const tt=Math.min(t,TEND);const k=tt<T0?-1:Math.min(B.length-1,Math.floor((tt-T0)/CD));const u=k<0?0:tt-T0-k*CD;const c=k>=0?B[k]:null;
+ const ph=!c?'boot':u<.7?'belt':u<1.3?'xray':u<1.75?'sniff':'out';
+ const done=i=>i<k||(i==k&&u>=1.9);
+ $('clock').textContent=`10:${String(6+Math.floor(tt*1.2)).padStart(2,'0')} · ${fmt(lerp(0,38940,Math.pow(clamp(tt/TEND),1.05)))} bags scanned`;
+ // departures board
+ let bh='';const r0=Math.min(Math.max(k-1,0),B.length-4);for(let j=0;j<4;j++){const i=r0+j;if(i<0||i>=B.length)continue;const b=B[i];
+  const uu=tt-(T0+i*CD);let st='BOARDING',col='#ffe9a8',settle=T0+i*CD-1;
+  if(uu>=.7&&uu<1.6){st='X-RAY SCAN';col='#5ff0ff';settle=T0+i*CD+.7}if(uu>=1.6){st=b.v==R?'SEIZED':'DEPARTED +'+b.pnl.toFixed(2);col=b.v==R?'#ff6b7a':'#4dff9a';settle=T0+i*CD+1.6}
+  const tm=`10:${String(8+i*3).padStart(2,'0')}`;
+  bh+=`<div style="display:flex;align-items:center;height:34px;${i==k?'background:rgba(122,184,255,.08);border-radius:4px;':''}"><span style="width:110px">${flap(tm,5,0,tt,i)}</span><span style="width:250px">${flap('$'+b.t,10,0,tt,i+50)}</span><span style="width:200px">${flap('MOON',5,0,tt,i+90)}</span><span style="width:110px">${flap(b.gate,3,0,tt,i+70)}</span><span>${flap(st,15,settle,tt,i+30,col)}</span></div>`}
+ $('board').innerHTML=bh;
+ // scene
+ let s=`<defs><linearGradient id="bagShine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="xg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a2a3a"/><stop offset="1" stop-color="#05121a"/></linearGradient></defs>`;
+ // belt
+ s+=`<rect x="0" y="${BELT_Y+58}" width="1080" height="22" fill="#1a2232" stroke="#2c3e58"/>`;
+ for(let x=-40;x<1100;x+=40){const xx=x-((tt*80)%40);s+=`<line x1="${xx}" y1="${BELT_Y+60}" x2="${xx+14}" y2="${BELT_Y+78}" stroke="#2c3e58" stroke-width="3"/>`}
+ for(let x=20;x<1080;x+=90)s+=`<circle cx="${x}" cy="${BELT_Y+90}" r="9" fill="#0f1520" stroke="#2c3e58" stroke-width="2"/>`;
+ // chute to seized bin
+ s+=`<path d="M${SNIFF_X-60},${BELT_Y+80} L${SNIFF_X-90},440 L${SNIFF_X+20},440 L${SNIFF_X+10},${BELT_Y+80}" fill="rgba(255,61,80,.06)" stroke="#5a2030" stroke-width="2" stroke-dasharray="6 4"/>`;
+ s+=`<text x="${SNIFF_X-35}" y="${BELT_Y+120}" text-anchor="middle" font-size="9" font-weight="800" font-family="JB" fill="#ff6b7a" opacity=".7">▼ SEIZED</text>`;
+ s+=`<text x="1060" y="${BELT_Y+50}" text-anchor="end" font-size="10" font-weight="800" font-family="JB" fill="#4dff9a" opacity=".8">GATE → ✈ MOON</text>`;
+ // x-ray machine body
+ s+=`<rect x="${XR[0]-10}" y="40" width="${XR[1]-XR[0]+20}" height="${BELT_Y+60-40}" rx="16" fill="#101826" stroke="#7ab8ff" stroke-width="3" style="filter:drop-shadow(0 0 10px rgba(122,184,255,.4))"/>`;
+ // x-ray screen
+ const SX=XR[0]+20,SY=62,SW=XR[1]-XR[0]-40,SH=190;s+=`<rect x="${SX}" y="${SY}" width="${SW}" height="${SH}" rx="8" fill="url(#xg)" stroke="#5ff0ff" stroke-width="1.5"/>`;
+ s+=`<text x="${SX+10}" y="${SY+16}" font-size="9" font-weight="800" font-family="JB" fill="#5ff0ff">X-RAY · ${c?'$'+c.t:'standby'}</text>`;
+ if(c&&ph!='belt'){const sf=ph=='xray'?(u-.7)/.6:1;const bx=SX+60,by=SY+40,bw=SW-120,bhh=120;
+  s+=`<rect x="${bx}" y="${by}" width="${bw}" height="${bhh}" rx="12" fill="rgba(95,240,255,.06)" stroke="#5ff0ff" stroke-width="2" stroke-dasharray="${ph=='xray'?'5 3':'0'}"/><rect x="${bx+bw/2-22}" y="${by-14}" width="44" height="14" rx="5" fill="none" stroke="#5ff0ff" stroke-width="2"/>`;
+  const its=c.items.map((n,i)=>({n,bad:false,i}));if(c.v==R)its.splice(1,0,{n:c.bad,bad:true,i:9});
+  its.forEach((it,j)=>{const ix=bx+16,iy=by+8+j*27;const rev=sf*its.length>j+.3;if(!rev)return;
+   const col=it.bad?'#ff3d50':'#5ff0ff';const pulse=it.bad?.6+.4*Math.abs(Math.sin(t*10)):1;
+   s+=`<rect x="${ix}" y="${iy}" width="18" height="18" rx="4" fill="${it.bad?'rgba(255,61,80,.35)':'rgba(95,240,255,.18)'}" stroke="${col}" stroke-width="2" opacity="${pulse}" style="${it.bad?'filter:drop-shadow(0 0 8px #ff3d50)':''}"/>
+    <text x="${ix+28}" y="${iy+13}" font-size="${it.bad?11:10}" font-weight="800" font-family="JB" fill="${col}" opacity="${pulse}">${it.n.toUpperCase()}</text>`});
+  if(ph=='xray'){const lx=SX+SW*sf;s+=`<line x1="${lx}" y1="${SY+4}" x2="${lx}" y2="${SY+SH-4}" stroke="#5ff0ff" stroke-width="2" style="filter:drop-shadow(0 0 6px #5ff0ff)"/>`}}
+ else s+=`<text x="${SX+SW/2}" y="${SY+SH/2}" text-anchor="middle" font-size="12" font-family="JB" fill="#2c5a6a">waiting for next bag…</text>`;
+ // tunnel opening
+ s+=`<rect x="${XR[0]-10}" y="${BELT_Y-6}" width="${XR[1]-XR[0]+20}" height="66" fill="#05080d" stroke="#7ab8ff" stroke-width="2"/>`;
+ for(let i=0;i<9;i++)s+=`<rect x="${XR[0]+i*36}" y="${BELT_Y-4}" width="30" height="60" fill="rgba(95,240,255,.05)"/>`;
+ // beacon
+ const alarm=c&&c.v==R&&(ph=='sniff'&&u>1.5||ph=='out');const ok=c&&c.v==W&&(ph=='sniff'&&u>1.5||ph=='out');const bcol=alarm?'#ff3d50':ok?'#4dff9a':'#3a4a60';
+ const bxp=(XR[0]+XR[1])/2;s+=`<rect x="${bxp-14}" y="22" width="28" height="18" rx="4" fill="#1a2232" stroke="#2c3e58"/><ellipse cx="${bxp}" cy="20" rx="16" ry="14" fill="${bcol}" style="filter:drop-shadow(0 0 ${alarm||ok?14:2}px ${bcol})"/>`;
+ if(alarm){const a=t*8;s+=`<path d="M${bxp},20 L${bxp+Math.cos(a)*300},${20+Math.sin(a)*120} L${bxp+Math.cos(a+.25)*300},${20+Math.sin(a+.25)*120} Z" fill="rgba(255,61,80,.18)"/><path d="M${bxp},20 L${bxp+Math.cos(a+Math.PI)*300},${20+Math.sin(a+Math.PI)*120} L${bxp+Math.cos(a+Math.PI+.25)*300},${20+Math.sin(a+Math.PI+.25)*120} Z" fill="rgba(255,61,80,.18)"/>`}
+ $('scene').innerHTML=s;
+ // foreground: bags
+ let f='';B.forEach((b,i)=>{const x=bagX(i,tt);if(x===null||x>1140)return;const uu=tt-(T0+i*CD);const drop=bagDrop(i,tt);
+  if(drop>=330)return;const inX=x>XR[0]-30&&x<XR[1]-30;const col=uu>1.5?(b.v==R?'#ff3d50':'#4dff9a'):'#7ab8ff';
+  let tag='';if(uu>1.6&&b.v==R)tag=`<g transform="translate(40,26) rotate(-14)"><rect x="-44" y="-13" width="88" height="26" rx="4" fill="rgba(40,4,10,.85)" stroke="#ff3d50" stroke-width="3"/><text x="0" y="6" text-anchor="middle" font-family="RB" font-weight="900" font-size="16" fill="#ff3d50">SEIZED</text></g>`;
+  if(uu>1.6&&b.v==W)tag=`<g transform="translate(40,26) rotate(10)"><rect x="-46" y="-13" width="92" height="26" rx="4" fill="rgba(4,30,16,.85)" stroke="#4dff9a" stroke-width="3"/><text x="0" y="6" text-anchor="middle" font-family="RB" font-weight="900" font-size="15" fill="#4dff9a">CLEARED</text></g>`;
+  f+=suitcase(x+(drop>0?-20*eo(drop/330):0),BELT_Y+drop,b,1,col,inX?.25:1,tag)});
+ $('fg').innerHTML=f;
+ // dog
+ let st='idle',lean=0,shY=null;if(c){if(ph=='belt')st='idle';else if(ph=='xray'){st='sniff';lean=-1}else if(ph=='sniff'){st=u>1.5?(c.v==R?'bark':'happy'):'sniff';lean=-.4}else{st=c.v==R?'bark':'happy';lean=c.v==R?-.6:.6}}
+ if(c&&c.v==W&&(ph=='out'||ph=='sniff'&&u>1.5))shY=lerp(-170,0,eo(clamp((u-1.5)/.3)));
+ poseDog('d',st,t,lean,shY);$('dogW').style.transform=`translateY(${st=='happy'?-Math.abs(Math.sin(t*9))*12:0}px)`;
+ let bt='',bc='#ffb340';if(!c)bt='on duty.';else if(ph=='belt')bt='next bag…';else if(ph=='xray')bt='sniff sniff…';else if(ph=='sniff'&&u<1.5)bt='*sniffs bag*';else{bt=c.v==R?'WOOF! '+c.why:'clear. ✈';bc=c.v==R?'#ff3d50':'#4dff9a'}
+ const bb=$('bub');bb.textContent=bt;bb.style.borderColor=bc;bb.style.color=bc;bb.style.boxShadow=`0 0 12px ${bc}`;bb.style.left='700px';bb.style.top='300px';
+ // readout
+ if(c){$('xrTag').innerHTML=ph=='xray'?'<span class="c">scanning…</span>':ph=='belt'?'incoming':c.v==R&&u>1.0?'<span class="r">contraband</span>':'<span class="g">clean</span>';
+  const lines=[['bag','$'+c.t],['flight',c.flight+' → MOON'],['mc',c.mc],['hidden item',ph=='belt'?'…':u<1.0?'scanning…':(c.v==R?`<span class="r">${c.bad}</span>`:'<span class="g">none</span>')],['K9 verdict',u<1.5?'…':(c.v==R?'<span class="r">WOOF · SEIZE</span>':'<span class="g">CLEAR · BOARD</span>')],['reason',u<1.5?'…':(c.v==R?c.why:'clean contract · LP burned')]];
+  $('xr').innerHTML=lines.map(([a,b])=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid #182234"><span class="d">${a}</span><span>${b}</span></div>`).join('')}
+ // seized + passes
+ const sz=B.filter((b,i)=>b.v==R&&done(i));$('seizTag').textContent=sz.length+' bags';
+ $('seized').innerHTML=sz.map(b=>`<div class="row"><span class="r">🚨 $${b.t}</span><span class="d">${b.why}</span></div>`).join('')||'<span class="d" style="font-size:11px">nothing seized yet</span>';
+ const cl=B.filter((b,i)=>b.v==W&&done(i));$('clrTag').textContent=cl.length;
+ $('passes').innerHTML=cl.map(b=>`<div style="display:flex;justify-content:space-between;align-items:center;height:46px;margin-bottom:6px;padding:0 10px;border-radius:8px;background:linear-gradient(90deg,rgba(77,255,154,.14),rgba(77,255,154,.03));border:1px dashed rgba(77,255,154,.5)"><div><div style="font-weight:800">$${b.t} <span class="d" style="font-weight:400">→ MOON</span></div><div class="d" style="font-size:9.5px">${b.flight} · gate ${b.gate} · seat 1A</div></div><div class="g" style="font-size:16px;font-weight:800">+${b.pnl.toFixed(2)}</div></div>`).join('')||'<span class="d" style="font-size:11px">no departures yet</span>';
+ // kpis
+ const pnl=pnlAt(tt);$('pnlTag').textContent='+'+pnl.toFixed(2)+' SOL';
+ $('kpis').innerHTML=[['BAGS SCANNED',fmt(lerp(0,38940,Math.pow(clamp(tt/TEND),1.05))),'#eef3fa'],['SEIZED',sz.length,'#ff6b7a'],['FLIGHTS TO MOON',cl.length,'#4dff9a'],['PNL · SOL','+'+pnl.toFixed(2),'#ffb340']].map(([a,b,col])=>`<div style="border:1px solid #1e2a3c;border-radius:8px;padding:6px 10px;height:58px"><div class="d" style="font-size:9.5px;font-weight:800;letter-spacing:.5px">${a}</div><div style="font-size:26px;font-weight:800;color:${col};text-shadow:0 0 10px ${col}55">${b}</div></div>`).join('');
+ const W_=500,H=132;const Y=v=>H-8-v/16*(H-16);let d='';const N=100;for(let i=0;i<=N;i++){const t2=i/N*TEND;if(t2>tt)break;d+=(i?'L':'M')+(i/N*W_).toFixed(1)+','+Y(pnlAt(t2)+Math.sin(t2*3)*.15).toFixed(1)}
+ const last=d?d.split(/[ML]/).pop().split(','):null;let mk='';B.forEach((b,i)=>{const at=T0+i*CD+1.6;if(at>tt)return;mk+=`<text x="${at/TEND*W_}" y="${H-1}" text-anchor="middle" font-size="9" fill="${b.v==R?'#ff3d50':'#4dff9a'}">${b.v==R?'✕':'✈'}</text>`});
+ $('chart').innerHTML=[0,8,16].map(v=>`<line x1="0" x2="${W_}" y1="${Y(v)}" y2="${Y(v)}" stroke="#182234"/>`).join('')+mk+(d?`<path d="${d} L${last[0]},${H-8} L0,${H-8} Z" fill="rgba(77,255,154,.08)"/><path d="${d}" fill="none" stroke="#4dff9a" stroke-width="2.2" style="filter:drop-shadow(0 0 4px #4dff9a)"/><circle cx="${last[0]}" cy="${last[1]}" r="3.5" fill="#fff"/>`:'');
+ $('log').innerHTML=LOG.filter(e=>e.t<=tt).slice(-17).map(e=>e.s).join('\n');$('lps').textContent=Math.round(9+Math.abs(Math.sin(t*2))*6)+' l/s';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ let fl=0,fc='255,61,80',sx=0,sy=0;if(alarm&&u<1.9){fl=.1+.08*Math.abs(Math.sin(t*14));const a=clamp(1-(u-1.5)/.4);sx=Math.sin(t*90)*5*a;sy=Math.cos(t*70)*4*a}
+ if(ok&&u<1.8){fl=.1*(1-(u-1.5)/.3);fc='77,255,154'}
+ $('flash').style.opacity=fl;$('flash').style.background=`radial-gradient(circle at 50% 35%,rgba(${fc},0),rgba(${fc},.85))`;
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;const app=$('app');app.style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';app.style.transform=`translate(${sx}px,${sy}px)`;if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){[['o1',0],['o2',.25],['o3',.45],['o4',.85],['o5',1.05],['o6',1.15],['o7',1.45],['o8',1.65],['o9',1.75]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`+(id=='o1'?` scale(${lerp(.7,1,v)})`:'')});
+ const ca=eo(clamp((s-.2)/.6));const od=$('oDog');od.style.opacity=ca;od.style.transform=`translateY(${(1-ca)*60-Math.abs(Math.sin(s*5))*10}px)`;
+ poseDog('o','happy',t,0,lerp(-200,0,eo(clamp((s-.9)/.4))));
+ let g=`<defs><radialGradient id="ob" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#7ab8ff" stop-opacity=".2"/><stop offset=".6" stop-color="#ffb340" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="1080" height="1350" fill="url(#ob)"/>`;
+ for(let i=0;i<14;i++){const r=rng(800+i);const ph=(s*.3+r())%1;g+=`<text x="${r()*1080}" y="${1350-ph*1500}" font-size="${28+r()*20}" opacity="${.25*(1-ph)}">✈</text>`}
+ $('oBg').innerHTML=g}
+window.render=render;
+Promise.all(['700 13px JB','800 12px JB','900 40px RB','700 28px RB','400 12px JB'].map(f=>document.fonts.load(f))).then(()=>document.fonts.ready).then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>
