@@ -28,6 +28,7 @@ Most new pump.fun coins don't make it. In May 2025 Solidus Labs reported that ab
 |---|---|---|
 | RUGHOUND terminal | `terminal/index.html` | 6 buried · 4 fetched |
 | **SNIFF K9 · pump.fun customs** — every coin is a suitcase on the belt: x-ray, sniff, SEIZED or CLEARED | `terminal/k9.html` | 6 seized · 4 cleared · +15.70 SOL |
+| **SNIFF DIGS · pump.fun backyard** — every coin is a fresh mound: Sniff digs it up, rugs get a tombstone, clean coins become golden bones | `terminal/dig.html` | 6 buried · 4 fetched · +17.20 SOL |
 
 ## Five tasks, one dog
 

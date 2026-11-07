@@ -1,0 +1,227 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SNIFF DIGS · pump.fun backyard</title>
+<style>
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:JB;src:url(../assets/fonts/jetbrains-mono-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-900-normal.woff2);font-weight:900}
+@font-face{font-family:RB;src:url(../assets/fonts/rubik-latin-700-normal.woff2);font-weight:700}
+:root{--bg:#070a10;--pan:rgba(12,17,26,.94);--bd:#1e2a3c;--bd2:#2c3e58;--tx:#eef3fa;--dim:#7f8da3;--dim2:#46536a;
+ --bl:#7ab8ff;--cy:#5ff0ff;--am:#ffb340;--rd:#ff3d50;--gr:#4dff9a;--gd:#ffd84a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1350px;overflow:hidden;background:var(--bg)}
+body{font-family:JB,monospace;color:var(--tx);font-size:12px}
+#app{position:absolute;inset:0;overflow:hidden;background:
+ radial-gradient(600px 400px at 540px 480px,rgba(122,184,255,.12),transparent 70%),
+ radial-gradient(700px 500px at 100% 0%,rgba(255,179,64,.06),transparent 70%),var(--bg)}
+#app::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(122,184,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(122,184,255,.035) 1px,transparent 1px);background-size:24px 24px}
+.abs{position:absolute}
+.panel{position:absolute;background:var(--pan);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.ph{position:absolute;left:12px;top:9px;font-size:11.5px;font-weight:800;letter-spacing:.7px}
+.pt{position:absolute;right:12px;top:10px;font-size:10px}
+.b{color:var(--bl)}.c{color:var(--cy)}.a{color:var(--am)}.r{color:#ff6b7a}.g{color:var(--gr)}.d{color:var(--dim)}.y{color:var(--gd)}
+.row{display:flex;justify-content:space-between;height:24px;align-items:center;font-size:11px;border-bottom:1px solid #182234;padding:0 4px}
+.fb{display:inline-block;background:#0b0f16;border:1px solid #1f2b3d;border-radius:3px;margin-right:2px;width:15px;height:22px;line-height:22px;text-align:center;font-weight:800;font-size:13px;color:#ffe9a8;position:relative}
+.fb::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.6)}
+.log{position:absolute;left:12px;right:10px;top:30px;bottom:8px;overflow:hidden;font-size:10.2px;line-height:15.3px;white-space:pre}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#outro{position:absolute;inset:0;z-index:70;opacity:0}
+#outro .cc{position:absolute;left:0;width:1080px;text-align:center}
+</style></head><body>
+<div id="app">
+ <div class="abs" style="left:18px;top:12px;font-family:RB;font-weight:900;font-size:36px;color:var(--am);letter-spacing:1px;text-shadow:0 0 16px rgba(255,179,64,.6)">SNIFF<span style="color:#c98a50;margin-left:10px;text-shadow:0 0 16px rgba(201,138,80,.6)">DIGS</span></div>
+ <div class="abs" style="left:262px;top:20px;padding:3px 12px;border:1.5px solid var(--gd);border-radius:7px;font-size:16px;font-weight:800;color:var(--gd);background:rgba(255,216,74,.1);box-shadow:0 0 12px rgba(255,216,74,.35)">$SNIFF</div>
+ <div class="abs d" style="left:380px;top:26px;font-size:11px">pump.fun backyard · every coin gets dug up</div>
+ <div class="abs" style="right:18px;top:24px;font-size:13px;font-weight:800;color:var(--am)">built by RGK</div>
+ <svg id="scene" class="abs" width="1080" height="640" style="left:0;top:64px"></svg>
+ <div id="dogW" class="abs" style="left:500px;top:90px;width:240px;height:300px;z-index:6;transform-origin:120px 290px"></div>
+ <svg id="fg" class="abs" width="1080" height="640" style="left:0;top:64px;z-index:8;overflow:visible"></svg>
+ <div id="bub" class="abs" style="z-index:12;padding:4px 10px;border:1.5px solid var(--am);border-radius:8px;font-size:14px;font-weight:800;background:rgba(8,10,16,.92);white-space:nowrap"></div>
+ <div id="depth" class="abs" style="z-index:9;left:16px;top:400px;font-size:11px;font-weight:800"></div>
+
+ <div class="panel" style="left:16px;top:716px;width:340px;height:232px">
+  <div class="ph r">🪦 RUG GRAVEYARD</div><div class="pt r" id="seizTag">0 buried</div>
+  <div id="seized" class="abs" style="left:12px;right:12px;top:36px"></div>
+ </div>
+ <div class="panel" style="left:370px;top:716px;width:340px;height:232px">
+  <div class="ph a">⛏ DIG REPORT</div><div class="pt d" id="xrTag">idle</div>
+  <div id="xr" class="abs" style="left:12px;right:12px;top:36px;font-size:11.5px;line-height:23px"></div>
+ </div>
+ <div class="panel" style="left:724px;top:716px;width:340px;height:232px">
+  <div class="ph y">🦴 BONE VAULT · FETCHED</div><div class="pt y" id="clrTag">0</div>
+  <div id="passes" class="abs" style="left:12px;right:12px;top:34px"></div>
+ </div>
+ <div class="panel" style="left:16px;top:960px;width:520px;height:326px">
+  <div class="ph a">SNIFF'S SHIFT</div><div class="pt a" id="pnlTag">+0.00 SOL</div>
+  <div id="kpis" class="abs" style="left:12px;right:12px;top:34px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+  <svg id="chart" class="abs" style="left:10px;top:176px" width="500" height="142"></svg>
+ </div>
+ <div class="panel" style="left:548px;top:960px;width:516px;height:326px">
+  <div class="ph b">dig.log</div><div class="pt d" id="lps"></div>
+  <div class="log" id="log"></div>
+ </div>
+ <div class="abs" style="left:16px;top:1298px;width:1048px;height:2px;background:rgba(255,255,255,.05)"><i id="prog" class="abs" style="left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--am),var(--gd));box-shadow:0 0 8px var(--am)"></i></div>
+ <div class="abs" style="left:16px;top:1314px;font-size:10.5px;font-weight:800;letter-spacing:.5px">SNIFF · DIG · FIND · BURY OR FETCH</div>
+ <div class="abs d" style="right:16px;top:1314px;font-size:10px">$SNIFF · simulated run · metrics illustrative · @rgk_degen</div>
+</div>
+<div id="flash"></div>
+<div id="outro">
+ <svg id="oBg" class="abs" width="1080" height="1350" style="left:0;top:0"></svg>
+ <div class="cc" id="o1" style="top:96px;font-family:RB;font-weight:900;font-size:130px;color:var(--am);text-shadow:0 0 30px rgba(255,179,64,.8)">SNIFF<span style="color:#e0a060;margin-left:24px;text-shadow:0 0 30px rgba(224,160,96,.8)">DIGS</span></div>
+ <div class="cc" id="o2" style="top:262px"><span style="display:inline-block;padding:6px 22px;border:3px solid var(--gd);border-radius:12px;font-size:40px;font-weight:800;color:var(--gd);box-shadow:0 0 22px rgba(255,216,74,.5)">$SNIFF</span></div>
+ <div class="cc" id="o3" style="top:350px;font-size:20px;font-weight:700">devs bury secrets. Sniff digs them up.</div>
+ <div id="oDog" class="abs" style="left:400px;top:400px;width:280px;height:350px"></div>
+ <div class="cc" id="o4" style="top:770px;font-size:92px;font-weight:800;color:var(--gr);text-shadow:0 0 26px rgba(77,255,154,.7)">+17.20 SOL</div>
+ <div class="cc" id="o5" style="top:886px;font-size:20px;font-weight:800"><span class="r">6 rugs buried</span> &nbsp;·&nbsp; <span class="y">4 golden bones</span> &nbsp;·&nbsp; 0 rugs fetched</div>
+ <div class="cc d" id="o6" style="top:928px;font-size:13px">sniff → dig → find → bury / fetch · 41,206 coins dug</div>
+ <div class="cc" id="o7" style="top:984px;font-family:RB;font-weight:900;font-size:54px;color:var(--am);text-shadow:0 0 20px rgba(255,179,64,.7)">every rug leaves a bone.</div>
+ <div class="cc" id="o8" style="top:1100px;font-family:RB;font-weight:700;font-size:30px;color:var(--am);text-shadow:0 0 14px rgba(255,179,64,.6)">built by RGK</div>
+ <div class="cc d" id="o9" style="top:1146px;font-size:11px">simulated run · not financial advice · @rgk_degen</div>
+</div>
+<script src="_dog.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const eo=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const R='rug',W='win';
+const B=[
+ {t:'BONEYARD',v:R,mc:'44K',bad:'DEV STASH 41%',why:'dev holds 41%',d:9.4},
+ {t:'FRISBEE',v:W,mc:'188K',pnl:2.80,d:11.2},
+ {t:'KIBBLE',v:R,mc:'61K',bad:'3 OLD RUGS',why:'serial rugger',d:10.1,roots:1},
+ {t:'LEASHED',v:R,mc:'53K',bad:'LP UNLOCKED',why:'LP not burned',d:8.7},
+ {t:'SPOT',v:W,mc:'236K',pnl:3.65,d:11.8},
+ {t:'TREAT',v:R,mc:'97K',bad:'HONEYPOT 99%',why:'99% sell tax',d:9.9},
+ {t:'PIRATEPUP',v:R,mc:'72K',bad:'31 WALLETS',why:'66% bundled',d:10.6},
+ {t:'ROVER',v:W,mc:'302K',pnl:4.45,d:12.3},
+ {t:'FURBALL',v:R,mc:'39K',bad:'MINT LIVE',why:'mint not revoked',d:9.1},
+ {t:'PACK',v:W,mc:'514K',pnl:6.30,d:12.9},
+];
+const T0=1.0,CD=2.4,TEND=T0+CD*B.length,TOUT=TEND+.35;
+const GY=316,HX=440,SW=64,FY=548; // ground y, hole x center, shaft width, find y (scene-local)
+const LOG=[];{LOG.push({t:.05,s:'<span class="a">rgk@yard</span>:~$ ./sniff --dig --yard pump.fun'});LOG.push({t:.4,s:'<span class="g">U・ᴥ・U  shovel paws ready · depth 0m · 0 rugs fetched</span>'});
+ const r=rng(9);let tt=.7;while(tt<TEND){LOG.push({t:tt,s:`<span class="d">mound ${Math.floor(r()*36**4).toString(36)} … ${['dirt','dirt','roots','dirt','rock'][Math.floor(r()*5)]}</span>`});tt+=.18+r()*.14}
+ B.forEach((b,k)=>{const s=T0+k*CD;LOG.push({t:s,s:`<span class="b">[mound]</span> $${b.t} · mc ${b.mc} · fresh dirt`});
+  LOG.push({t:s+.5,s:`<span class="a">[dig]</span> going down… ${b.d.toFixed(1)}m`});
+  LOG.push({t:s+1.35,s:b.v==R?`<span class="r">[find] ${b.bad}</span>`:`<span class="y">[find] golden bone · LP burned · clean dev</span>`});
+  LOG.push({t:s+1.7,s:b.v==R?`<span class="r">[bury] WOOF · ${b.why} · RIP $${b.t}</span>`:`<span class="g">[fetch] 0.5 SOL in · tp 2x/4x/9x · +${b.pnl.toFixed(2)} SOL</span>`})});LOG.sort((a,b)=>a.t-b.t)}
+function pnlAt(t){let p=0;B.forEach((b,k)=>{if(b.v==W)p+=b.pnl*eo(clamp((t-(T0+k*CD+1.9))/.35))});return p}
+$('dogW').innerHTML=dogSVG('d');$('oDog').innerHTML=dogSVG('o');
+// no cap for dig episode
+document.querySelectorAll('[id^=cap]').forEach(e=>e.style.display='none');
+const rugIdx=B.map((b,i)=>b.v==R?i:-1).filter(i=>i>=0),winIdx=B.map((b,i)=>b.v==W?i:-1).filter(i=>i>=0);
+const tombX=j=>40+j*58, vault=j=>[856+(j%2)*104,GY-34-Math.floor(j/2)*44];
+function bone(x,y,sc,col,glow){return `<g transform="translate(${x},${y}) scale(${sc})" style="${glow?`filter:drop-shadow(0 0 10px ${col})`:''}"><path d="M-30,-6 L30,-6 A9,9 0 1 1 38,-14 A9,9 0 1 1 38,2 L38,2 A9,9 0 1 1 38,14 A9,9 0 1 1 30,6 L-30,6 A9,9 0 1 1 -38,14 A9,9 0 1 1 -38,-2 A9,9 0 1 1 -38,-14 A9,9 0 1 1 -30,-6 Z" fill="${col}" stroke="#fff3a8" stroke-width="1.5"/></g>`}
+function skull(x,y,sc,a){return `<g transform="translate(${x},${y}) scale(${sc})" opacity="${a}" style="filter:drop-shadow(0 0 10px #ff3d50)">
+ <path d="M-34,-30 L34,30 M34,-30 L-34,30" stroke="#ffd0d4" stroke-width="9" stroke-linecap="round"/><circle cx="-36" cy="-32" r="6" fill="#ffd0d4"/><circle cx="36" cy="-32" r="6" fill="#ffd0d4"/><circle cx="-36" cy="32" r="6" fill="#ffd0d4"/><circle cx="36" cy="32" r="6" fill="#ffd0d4"/>
+ <path d="M0,-40 C26,-40 32,-20 30,-4 C28,8 22,10 20,20 L-20,20 C-22,10 -28,8 -30,-4 C-32,-20 -26,-40 0,-40 Z" fill="#f3e6e6" stroke="#ff3d50" stroke-width="3"/>
+ <ellipse cx="-12" cy="-8" rx="8" ry="9" fill="#2a0408"/><ellipse cx="12" cy="-8" rx="8" ry="9" fill="#2a0408"/><path d="M0,4 l-5,8 h10 z" fill="#2a0408"/><path d="M-12,20 v-6 M-4,20 v-6 M4,20 v-6 M12,20 v-6" stroke="#2a0408" stroke-width="2"/></g>`}
+function render(t){
+ const tt=Math.min(t,TEND);const k=tt<T0?-1:Math.min(B.length-1,Math.floor((tt-T0)/CD));const u=k<0?0:tt-T0-k*CD;const c=k>=0?B[k]:null;
+ const ph=!c?'boot':u<.4?'sniff':u<1.3?'dig':u<1.7?'find':'out';
+ const done=i=>i<k||(i==k&&u>=1.8);
+ const dug=fmt(lerp(0,41206,Math.pow(clamp(tt/TEND),1.05)));
+ let s=`<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070e"/><stop offset="1" stop-color="#131022"/></linearGradient>
+  <linearGradient id="dirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2414"/><stop offset=".25" stop-color="#2b1a0e"/><stop offset=".6" stop-color="#1f150d"/><stop offset="1" stop-color="#151011"/></linearGradient>
+  <radialGradient id="moon" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff6d8"/><stop offset=".7" stop-color="#ffe2a0"/><stop offset="1" stop-color="#ffb340" stop-opacity="0"/></radialGradient></defs>`;
+ s+=`<rect width="1080" height="${GY}" fill="url(#sky)"/>`;
+ {const r=rng(3);for(let i=0;i<60;i++){const x=r()*1080,y=r()*(GY-60),tw=.3+.7*Math.abs(Math.sin(t*1.5+i));s+=`<circle cx="${x}" cy="${y}" r="${r()*1.3+.4}" fill="#fff" opacity="${tw*.7}"/>`}}
+ s+=`<circle cx="960" cy="70" r="60" fill="url(#moon)" opacity=".35"/><circle cx="960" cy="70" r="34" fill="#fff1c8" style="filter:drop-shadow(0 0 18px #ffd27a)"/>`;
+ // fence
+ for(let x=0;x<1080;x+=26)s+=`<path d="M${x},${GY} v-58 l8,-9 l8,9 v58 z" fill="#0d0f1a" stroke="#1f2338" stroke-width="1"/>`;
+ s+=`<rect x="0" y="${GY-44}" width="1080" height="6" fill="#141828"/>`;
+ // underground
+ s+=`<rect x="0" y="${GY}" width="1080" height="${640-GY}" fill="url(#dirt)"/>`;
+ [GY+56,GY+150,GY+250].forEach((y,i)=>{let d=`M0,${y}`;for(let x=0;x<=1080;x+=40)d+=` L${x},${y+Math.sin(x*.02+i*2)*6}`;s+=`<path d="${d}" fill="none" stroke="#ffb340" stroke-opacity=".12" stroke-width="2"/>`});
+ {const r=rng(21);for(let i=0;i<70;i++){const x=r()*1080,y=GY+14+r()*(620-GY);if(Math.abs(x-HX)<SW)continue;s+=`<ellipse cx="${x}" cy="${y}" rx="${3+r()*8}" ry="${2+r()*5}" fill="#4a3424" opacity="${.3+r()*.4}"/>`}}
+ // fossils deco
+ s+=`<g opacity=".35">${bone(760,GY+200,.7,'#8a7a62',false)}${bone(140,GY+260,.55,'#8a7a62',false)}</g>`;
+ // grass
+ s+=`<rect x="0" y="${GY-4}" width="1080" height="8" fill="#1d5a2c" style="filter:drop-shadow(0 0 6px rgba(77,255,154,.4))"/>`;
+ {const r=rng(5);for(let x=0;x<1080;x+=7){const h=6+r()*9;s+=`<path d="M${x},${GY} q${2+Math.sin(t*2+x)*1.5},${-h/2} ${3},${-h}" stroke="#2f8a44" stroke-width="2" fill="none"/>`}}
+ // depth ruler
+ const dmax=c?c.d:0;let dig=0;if(c){dig=ph=='sniff'?0:ph=='dig'?eio((u-.4)/.9):ph=='find'?1:1-eo(clamp((u-1.9)/.45))}
+ const sy=GY+(FY+40-GY)*dig;
+ for(let m=0;m<=13;m++){const y=GY+m*(FY+40-GY)/13;s+=`<line x1="${HX+SW/2+8}" x2="${HX+SW/2+(m%5==0?22:14)}" y1="${y}" y2="${y}" stroke="#ffb340" stroke-opacity=".45"/>${m%5==0?`<text x="${HX+SW/2+26}" y="${y+4}" font-family="JB" font-size="9" fill="#ffb340" opacity=".6">${m}m</text>`:''}`}
+ // shaft
+ if(dig>0){s+=`<path d="M${HX-SW/2},${GY} L${HX-SW/2+4},${sy} Q${HX},${sy+14} ${HX+SW/2-4},${sy} L${HX+SW/2},${GY} Z" fill="#07050a" stroke="#ffb340" stroke-width="2" style="filter:drop-shadow(0 0 8px rgba(255,179,64,.6))"/>`;
+  s+=`<line x1="${HX-SW/2-24}" x2="${HX-SW/2-6}" y1="${sy}" y2="${sy}" stroke="#ffd84a" stroke-width="2"/><text x="${HX-SW/2-28}" y="${sy+4}" text-anchor="end" font-family="JB" font-weight="800" font-size="11" fill="#ffd84a">${(dmax*dig).toFixed(1)}m</text>`}
+ // graveyard label + vault label
+ s+=`<text x="20" y="${GY+22}" font-family="JB" font-weight="800" font-size="10" fill="#ff6b7a" opacity=".75">RUG GRAVEYARD ▲</text><text x="1060" y="${GY+22}" text-anchor="end" font-family="JB" font-weight="800" font-size="10" fill="#ffd84a" opacity=".8">▲ BONE VAULT</text>`;
+ // doghouse vault
+ s+=`<path d="M830,${GY} V${GY-130} L945,${GY-196} L1060,${GY-130} V${GY} Z" fill="#120c07" stroke="#ffb340" stroke-width="3" style="filter:drop-shadow(0 0 8px rgba(255,179,64,.5))"/><text x="945" y="${GY-140}" text-anchor="middle" font-family="RB" font-weight="900" font-size="15" fill="#ffb340">SNIFF HQ</text>`;
+ $('scene').innerHTML=s;
+ // ---- foreground
+ let f='';
+ // tombstones
+ rugIdx.forEach((i,j)=>{const at=T0+i*CD+1.75;if(tt<at)return;const e=eo(clamp((tt-at)/.4));const x=tombX(j),b=B[i];const hh=74;
+  f+=`<g transform="translate(${x},${GY+(1-e)*hh})"><path d="M0,0 V-${hh-22} A24,22 0 0 1 48,-${hh-22} V0 Z" fill="#1a1d28" stroke="#ff3d50" stroke-width="2.5" style="filter:drop-shadow(0 0 6px rgba(255,61,80,.6))"/>
+   <text x="24" y="-${hh-30}" text-anchor="middle" font-family="RB" font-weight="900" font-size="12" fill="#ff6b7a">RIP</text><text x="24" y="-28" text-anchor="middle" font-family="JB" font-weight="800" font-size="${b.t.length>7?6.5:8}" fill="#eef3fa">$${b.t}</text><text x="24" y="-14" text-anchor="middle" font-family="JB" font-size="6" fill="#ff9aa4">${b.why.split(' ').slice(0,2).join(' ')}</text></g>`});
+ // vault bones
+ winIdx.forEach((i,j)=>{const at=T0+i*CD+1.75;if(tt<at)return;const e=eio(clamp((tt-at)/.5));const [vx,vy]=vault(j);const x=lerp(HX,vx,e),y=lerp(FY+64,vy,e)-Math.sin(e*Math.PI)*120;
+  f+=bone(x,y,lerp(1.1,.8,e),'#ffd84a',true);if(e>=1)f+=`<text x="${vx}" y="${vy+4}" text-anchor="middle" font-family="JB" font-weight="800" font-size="10" fill="#3a2600">+${B[i].pnl.toFixed(2)}</text>`});
+ if(c){
+  // mound + sign
+  const pop=eo(clamp(u/.3));const mound=ph=='sniff'?1:ph=='dig'?1-eio((u-.4)/.9)*.8:ph=='find'?.2:lerp(.2,0,clamp((u-1.9)/.4));
+  const pile=ph=='sniff'?0:ph=='dig'?eio((u-.4)/.9):ph=='find'?1:1-clamp((u-1.9)/.45);
+  if(k==B.length-1&&u>2.35){}else{
+  f+=`<path d="M${HX-60},${GY} Q${HX},${GY-50*mound*pop} ${HX+60},${GY} Z" fill="#4a2e18" stroke="#ffb340" stroke-width="2"/>`;
+  f+=`<path d="M${HX-150},${GY} Q${HX-110},${GY-60*pile} ${HX-56},${GY} Z" fill="#4a2e18" stroke="#c98a50" stroke-width="1.5" opacity="${pile>0?1:0}"/>`;
+  f+=`<g transform="translate(${HX-6},${GY-40*pop}) rotate(${-6+Math.sin(t*2)*2})" opacity="${pop}"><rect x="-2" y="-30" width="5" height="70" fill="#6a4a2a"/><rect x="-44" y="-66" width="96" height="38" rx="5" fill="#f2e6cc" stroke="#ffb340" stroke-width="2"/><text x="4" y="-50" text-anchor="middle" font-family="JB" font-size="8" fill="#5a4020">fresh mint</text><text x="4" y="-35" text-anchor="middle" font-family="JB" font-weight="800" font-size="${c.t.length>8?10:12}" fill="#1a1008">$${c.t}</text></g>`}
+  // dirt particles
+  if(ph=='dig'){for(let i=0;i<26;i++){const r=rng(i*13+k);const p=(t*2.4+r())%1;const vx=-(40+r()*160),vy=-(120+r()*120);const x=HX+vx*p,y=GY+vy*p+260*p*p;
+   f+=`<circle cx="${x}" cy="${y}" r="${2+r()*4}" fill="${r()<.3?'#c98a50':'#5a3a20'}" opacity="${1-p*.6}"/>`}}
+  // find
+  if(ph=='find'||ph=='out'){const a=eo(clamp((u-1.3)/.3));const fade=1-clamp((u-2.0)/.3);
+   if(c.v==R){f+=`<circle cx="${HX}" cy="${FY+20}" r="${70*a}" fill="rgba(255,61,80,.18)"/>`+skull(HX,FY+20,.75*a,fade);
+    f+=`<g opacity="${a*fade}"><rect x="${HX+70}" y="${FY-6}" width="${c.bad.length*9+26}" height="28" rx="6" fill="rgba(40,4,10,.9)" stroke="#ff3d50" stroke-width="2"/><text x="${HX+83}" y="${FY+13}" font-family="JB" font-weight="800" font-size="14" fill="#ff6b7a">${c.bad}</text></g>`;
+    if(c.roots){for(let q=0;q<3;q++){const ey=GY+40+q*60;const pr=clamp((u-1.35)/.4);f+=`<path d="M${HX-30},${FY+10} C${HX-120},${FY-20-q*30} ${HX-200},${ey+30} ${lerp(HX-30,0,pr)},${ey}" fill="none" stroke="#ff3d50" stroke-width="2.5" stroke-dasharray="6 4" opacity="${fade}" style="filter:drop-shadow(0 0 5px #ff3d50)"/>`}
+     f+=`<text x="20" y="${GY+300}" font-family="JB" font-weight="800" font-size="11" fill="#ff6b7a" opacity="${a*fade}">◀ same dev · 3 old rugs</text>`}}
+   else{f+=`<circle cx="${HX}" cy="${FY+20}" r="${80*a}" fill="rgba(255,216,74,.2)"/>`;if(u<1.75)f+=bone(HX,FY+20,1.1*a,'#ffd84a',true);
+    f+=`<g opacity="${a*fade}"><rect x="${HX+70}" y="${FY-6}" width="170" height="28" rx="6" fill="rgba(40,30,4,.9)" stroke="#ffd84a" stroke-width="2"/><text x="${HX+83}" y="${FY+13}" font-family="JB" font-weight="800" font-size="14" fill="#ffd84a">GOLDEN BONE ✦</text></g>`}}
+ }
+ $('fg').innerHTML=f;
+ // dog
+ let st='idle',lean=-.5,shY=null;if(c){if(ph=='sniff')st='sniff';else if(ph=='dig')st='dig';else if(ph=='find')st=u>1.5?(c.v==R?'bark':'happy'):'sniff';else st=c.v==R?'bark':'happy'}
+ if(c&&c.v==W&&(ph=='out'||ph=='find'&&u>1.5))shY=lerp(-170,0,eo(clamp((u-1.5)/.3)));
+ poseDog('d',st,t,lean,shY);
+ const jx=st=='dig'?Math.sin(t*40)*4:0,jy=st=='dig'?Math.abs(Math.sin(t*20))*-8:st=='happy'?-Math.abs(Math.sin(t*9))*12:0;
+ $('dogW').style.transform=`translate(${jx}px,${jy}px) rotate(${st=='dig'?-4:0}deg)`;
+ let bt='',bc='#ffb340';if(!c)bt='yard patrol.';else if(ph=='sniff')bt='sniff sniff… fresh mint';else if(ph=='dig')bt='*digs* '+(c.d*clamp((u-.4)/.9)).toFixed(1)+'m';else if(u<1.5)bt='found something…';else{bt=c.v==R?'WOOF! '+c.why:'golden bone! fetch.';bc=c.v==R?'#ff3d50':'#ffd84a'}
+ const bb=$('bub');bb.textContent=bt;bb.style.borderColor=bc;bb.style.color=bc;bb.style.boxShadow=`0 0 12px ${bc}`;bb.style.left='660px';bb.style.top='96px';
+ $('depth').innerHTML='';
+ // report
+ if(c){$('xrTag').innerHTML=ph=='dig'?'<span class="a">digging…</span>':ph=='sniff'?'sniffing':c.v==R&&u>1.3?'<span class="r">rug found</span>':u>1.3?'<span class="y">golden bone</span>':'…';
+  const lines=[['coin','$'+c.t],['mc',c.mc],['depth',ph=='sniff'?'0.0m':(c.d*clamp((u-.4)/.9)).toFixed(1)+'m'],['buried under',u<1.3?'…':(c.v==R?`<span class="r">${c.bad}</span>`:'<span class="y">golden bone</span>')],['verdict',u<1.5?'…':(c.v==R?'<span class="r">WOOF · BURY</span>':'<span class="g">FETCH · 0.5 SOL</span>')],['reason',u<1.5?'…':(c.v==R?c.why:'LP burned · clean dev')]];
+  $('xr').innerHTML=lines.map(([a,b])=>`<div style="display:flex;justify-content:space-between;border-bottom:1px solid #182234"><span class="d">${a}</span><span>${b}</span></div>`).join('')}
+ const sz=B.filter((b,i)=>b.v==R&&done(i));$('seizTag').textContent=sz.length+' buried';
+ $('seized').innerHTML=sz.map(b=>`<div class="row"><span class="r">🪦 $${b.t}</span><span class="d">${b.why}</span></div>`).join('')||'<span class="d" style="font-size:11px">graveyard empty… for now</span>';
+ const cl=B.filter((b,i)=>b.v==W&&done(i));$('clrTag').textContent=cl.length+' bones';
+ $('passes').innerHTML=cl.map(b=>`<div style="display:flex;justify-content:space-between;align-items:center;height:42px;margin-bottom:5px;padding:0 10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,216,74,.16),rgba(255,216,74,.03));border:1px solid rgba(255,216,74,.45)"><div><div style="font-weight:800">🦴 $${b.t}</div><div class="d" style="font-size:9.5px">dug ${b.d.toFixed(1)}m · tp 2x/4x/9x</div></div><div class="g" style="font-size:16px;font-weight:800">+${b.pnl.toFixed(2)}</div></div>`).join('')||'<span class="d" style="font-size:11px">no bones yet</span>';
+ const pnl=pnlAt(tt);$('pnlTag').textContent='+'+pnl.toFixed(2)+' SOL';
+ $('kpis').innerHTML=[['COINS DUG',dug,'#eef3fa'],['RUGS BURIED',sz.length,'#ff6b7a'],['GOLDEN BONES',cl.length,'#ffd84a'],['PNL · SOL','+'+pnl.toFixed(2),'#4dff9a']].map(([a,b,col])=>`<div style="border:1px solid #1e2a3c;border-radius:8px;padding:6px 10px;height:62px"><div class="d" style="font-size:9.5px;font-weight:800;letter-spacing:.5px">${a}</div><div style="font-size:28px;font-weight:800;color:${col};text-shadow:0 0 10px ${col}55">${b}</div></div>`).join('');
+ const W_=500,H=136;const Y=v=>H-10-v/18*(H-18);let d='';const N=100;for(let i=0;i<=N;i++){const t2=i/N*TEND;if(t2>tt)break;d+=(i?'L':'M')+(i/N*W_).toFixed(1)+','+Y(pnlAt(t2)+Math.sin(t2*3)*.15).toFixed(1)}
+ const last=d?d.split(/[ML]/).pop().split(','):null;let mk='';B.forEach((b,i)=>{const at=T0+i*CD+1.7;if(at>tt)return;mk+=`<text x="${at/TEND*W_}" y="${H-1}" text-anchor="middle" font-size="9" fill="${b.v==R?'#ff3d50':'#ffd84a'}">${b.v==R?'✕':'◆'}</text>`});
+ $('chart').innerHTML=[0,9,18].map(v=>`<line x1="0" x2="${W_}" y1="${Y(v)}" y2="${Y(v)}" stroke="#182234"/>`).join('')+mk+(d?`<path d="${d} L${last[0]},${H-10} L0,${H-10} Z" fill="rgba(77,255,154,.08)"/><path d="${d}" fill="none" stroke="#4dff9a" stroke-width="2.2" style="filter:drop-shadow(0 0 4px #4dff9a)"/><circle cx="${last[0]}" cy="${last[1]}" r="3.5" fill="#fff"/>`:'');
+ $('log').innerHTML=LOG.filter(e=>e.t<=tt).slice(-18).map(e=>e.s).join('\n');$('lps').textContent=Math.round(9+Math.abs(Math.sin(t*2))*6)+' l/s';
+ $('prog').style.width=(1048*clamp(t/TOUT))+'px';
+ const alarm=c&&c.v==R&&u>1.5,ok=c&&c.v==W&&u>1.5;
+ let fl=0,fc='255,61,80',sx=0,sy2=0;if(alarm&&u<1.9){fl=.1+.08*Math.abs(Math.sin(t*14));const a=clamp(1-(u-1.5)/.4);sx=Math.sin(t*90)*5*a;sy2=Math.cos(t*70)*4*a}
+ if(ok&&u<1.8){fl=.12*(1-(u-1.5)/.3);fc='255,216,74'}
+ if(c&&ph=='dig'){sx+=Math.sin(t*60)*1.2;sy2+=Math.cos(t*50)*1.2}
+ $('flash').style.opacity=fl;$('flash').style.background=`radial-gradient(circle at 50% 35%,rgba(${fc},0),rgba(${fc},.85))`;
+ const o=clamp((t-TOUT)/.5);$('outro').style.opacity=o;const app=$('app');app.style.filter=o>0?`blur(${6*o}px) brightness(${1-.7*o})`:'none';app.style.transform=`translate(${sx}px,${sy2}px)`;if(o>0)outro(t-TOUT,t);
+}
+function outro(s,t){[['o1',0],['o2',.25],['o3',.45],['o4',.85],['o5',1.05],['o6',1.15],['o7',1.45],['o8',1.65],['o9',1.75]].forEach(([id,d])=>{const v=eo(clamp((s-d)/.4));$(id).style.opacity=v;$(id).style.transform=`translateY(${(1-v)*16}px)`+(id=='o1'?` scale(${lerp(.7,1,v)})`:'')});
+ const ca=eo(clamp((s-.2)/.6));const od=$('oDog');od.style.opacity=ca;od.style.transform=`translateY(${(1-ca)*60-Math.abs(Math.sin(s*5))*10}px)`;
+ poseDog('o','happy',t,0,lerp(-200,0,eo(clamp((s-.9)/.4))));
+ let g=`<defs><radialGradient id="ob" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#ffb340" stop-opacity=".2"/><stop offset=".6" stop-color="#ffd84a" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="1080" height="1350" fill="url(#ob)"/>`;
+ for(let i=0;i<14;i++){const r=rng(800+i);const p=(s*.3+r())%1;g+=`<g opacity="${.3*(1-p)}">${bone(r()*1080,1350-p*1500,.5+r()*.4,'#ffd84a',false)}</g>`}
+ $('oBg').innerHTML=g}
+window.render=render;
+Promise.all(['700 13px JB','800 12px JB','900 40px RB','700 28px RB','400 12px JB'].map(f=>document.fonts.load(f))).then(()=>document.fonts.ready).then(()=>{window.READY=true;
+ if(!location.search.includes('render')){const t0=performance.now();const tick=n=>{render(((n-t0)/1000)%30);requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const fit=()=>{const k=Math.min(innerWidth/1080,innerHeight/1350);document.body.style.transform=`scale(${k})`;document.body.style.transformOrigin='0 0'};fit();addEventListener('resize',fit)}});
+</script></body></html>
